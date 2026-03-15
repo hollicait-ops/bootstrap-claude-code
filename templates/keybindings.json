@@ -1,0 +1,22 @@
+[
+  {
+    "key": "ctrl+shift+p",
+    "command": "claude.openPlanMode",
+    "description": "Enter plan mode (design before executing)"
+  },
+  {
+    "key": "ctrl+shift+m",
+    "command": "claude.openMemory",
+    "description": "Open memory viewer"
+  },
+  {
+    "key": "ctrl+shift+.",
+    "command": "claude.clearConversation",
+    "description": "Clear the current conversation"
+  },
+  {
+    "key": "space",
+    "command": "voice:pushToTalk",
+    "description": "Push-to-talk voice input (hold space to speak)"
+  }
+]

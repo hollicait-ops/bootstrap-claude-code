@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# PreToolUse Hook — runs before every tool call
+#
+# Environment variables available:
+#   CLAUDE_TOOL_NAME   — name of the tool about to run (e.g., "Bash", "Edit")
+#   CLAUDE_TOOL_INPUT  — JSON-encoded tool input
+#
+# Exit codes:
+#   0 — allow the tool to run
+#   2 — block the tool (stdout is shown to Claude as the reason)
+#
+# This template blocks catastrophically destructive shell commands as a
+# last-resort safety net below the deny rules in settings.json.
+# All other behaviors are commented out — opt in by uncommenting.
+
+TOOL_NAME="${CLAUDE_TOOL_NAME:-}"
+TOOL_INPUT="${CLAUDE_TOOL_INPUT:-}"
+
+# ── Safety guard: block root/home recursive deletes ─────────────────────────
+if [[ "$TOOL_NAME" == "Bash" ]] && command -v python3 &>/dev/null; then
+  COMMAND="$(python3 -c "
+import sys, json
+try:
+    d = json.loads('''${TOOL_INPUT}''')
+    print(d.get('command', ''))
+except Exception:
+    pass
+" 2>/dev/null)"
+
+  # Block: rm -rf / or rm -rf ~
+  if echo "$COMMAND" | grep -qE 'rm[[:space:]]+-[a-zA-Z]*r[a-zA-Z]*f[[:space:]]+(/|~|/root|\$HOME)[[:space:]]*$'; then
+    echo "BLOCKED: Attempted to recursively delete a root-level or home directory. This is almost certainly a mistake."
+    exit 2
+  fi
+
+  # Block: dd if=/dev/zero targeting a whole disk
+  if echo "$COMMAND" | grep -qE 'dd[[:space:]].*of=/dev/(sd[a-z]|nvme[0-9])[[:space:]]*$'; then
+    echo "BLOCKED: Attempted to overwrite a raw disk device with dd."
+    exit 2
+  fi
+fi
+
+# ── Optional: log every tool call to an audit file ──────────────────────────
+# LOG_FILE="${HOME}/.claude/tool-audit.log"
+# echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) PRE  TOOL=${TOOL_NAME}" >> "$LOG_FILE"
+
+# ── Optional: require confirmation before any npm publish ───────────────────
+# if [[ "$TOOL_NAME" == "Bash" ]]; then
+#   if echo "$COMMAND" | grep -q 'npm publish'; then
+#     read -r -p "About to run: $COMMAND  — Continue? [y/N] " reply
+#     [[ "$reply" =~ ^[Yy]$ ]] || { echo "Cancelled by user."; exit 2; }
+#   fi
+# fi
+
+exit 0

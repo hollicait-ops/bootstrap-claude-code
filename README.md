@@ -1,2 +1,126 @@
-# bootstrap-claude-code
-A self-contained bootstrapper for setting up any user with the basic best practice configurations for using Claude Code as well as comprehensive user guide to customize it to their needs.
+# Bootstrap Claude Code
+
+A self-contained bootstrapper that sets up best-practice Claude Code configurations
+for new and experienced users alike. Run one script, get a fully configured setup.
+
+## What It Installs
+
+| File | Description |
+|------|-------------|
+| `~/.claude/settings.json` | Sensible allow/deny/ask permission rules, model selection |
+| `~/.claude/CLAUDE.md` | Global instructions for consistent behavior across all projects |
+| `~/.claude/keybindings.json` | Useful keyboard shortcuts |
+| `~/.claude/memory/MEMORY.md` | Persistent memory index |
+| `~/.claude/hooks/*.sh` | Safety guards and automation hooks (opt-in behaviors) |
+| `~/.claude/commands/*.md` | `/commit`, `/review-pr`, `/security-check`, `/daily-standup` |
+
+All existing files are backed up before any changes are made.
+
+## Quick Start
+
+```bash
+git clone https://github.com/your-org/bootstrap-claude-code
+cd bootstrap-claude-code
+./install.sh
+```
+
+### Options
+
+```bash
+./install.sh --dry-run      # Preview changes without making them
+./install.sh --minimal      # Only install settings.json and CLAUDE.md
+./install.sh --force        # Overwrite existing files without prompting
+./install.sh --unattended   # Accept all defaults (for CI/automation)
+./install.sh --verify       # Check an existing install without changing anything
+```
+
+## Requirements
+
+- **Bash 4+** — macOS ships with bash 3; upgrade: `brew install bash`
+- **Claude Code** — installed automatically if missing (requires npm)
+- **python3** — used for smart JSON merging; installed automatically if missing
+
+The installer will detect missing requirements and offer to install them.
+
+## What the Permission Rules Do
+
+The installed `settings.json` configures three tiers of permission:
+
+**Allow (no prompt):** Read-only git commands, file listing, test runners, build tools
+**Ask (confirm first):** `git push`, `npm publish`, `curl`, `rm -rf`
+**Deny (always blocked):** `rm -rf /`, `rm -rf ~`, reading `.env` files, reading SSH keys, force push
+
+## The Slash Commands
+
+After install, these commands are available in any Claude Code session:
+
+| Command | Usage | Description |
+|---------|-------|-------------|
+| `/commit` | `/commit` | Review staged changes and create a well-formed git commit |
+| `/review-pr` | `/review-pr 123` | Review a PR for quality, security, and correctness |
+| `/security-check` | `/security-check src/` | Scan for common security vulnerabilities |
+| `/daily-standup` | `/daily-standup` | Generate a standup from recent git activity |
+
+## The Hook Scripts
+
+Hooks are installed but **do nothing by default** — all behaviors are opt-in.
+Edit the scripts to enable what you want:
+
+| Hook | What you can enable |
+|------|---------------------|
+| `~/.claude/hooks/pre-tool-use.sh` | Block dangerous commands, require confirmation |
+| `~/.claude/hooks/post-tool-use.sh` | Audit logging, auto-format on edit, auto-test |
+| `~/.claude/hooks/stop.sh` | Desktop notification when Claude finishes |
+| `~/.claude/hooks/session-start.sh` | Show git status, load project context |
+
+See [docs/04-hooks.md](docs/04-hooks.md) and [examples/hooks/](examples/hooks/) for
+ready-to-use hook scripts.
+
+## Uninstalling
+
+```bash
+./uninstall.sh
+```
+
+To restore a backup:
+```bash
+./uninstall.sh --restore-backup ~/.claude/bootstrapper-backup-20250315-143022
+```
+
+## User Guide
+
+The `docs/` directory contains a complete reference for every Claude Code feature:
+
+- [docs/00-overview.md](docs/00-overview.md) — What this bootstrapper sets up and why
+- [docs/01-settings.md](docs/01-settings.md) — settings.json: permissions, model, all options
+- [docs/02-claude-md.md](docs/02-claude-md.md) — Writing effective CLAUDE.md instruction files
+- [docs/03-memory.md](docs/03-memory.md) — Persistent memory system
+- [docs/04-hooks.md](docs/04-hooks.md) — Shell hooks for automation and safety
+- [docs/05-mcp-servers.md](docs/05-mcp-servers.md) — Extending Claude with MCP tools
+- [docs/06-slash-commands.md](docs/06-slash-commands.md) — Custom slash commands / skills
+- [docs/07-keybindings.md](docs/07-keybindings.md) — Keyboard shortcuts
+- [docs/08-plan-mode.md](docs/08-plan-mode.md) — Structured planning before execution
+- [docs/09-subagents.md](docs/09-subagents.md) — Parallel and specialized subagents
+- [docs/10-advanced-patterns.md](docs/10-advanced-patterns.md) — Combining features for powerful workflows
+
+## Examples
+
+The `examples/` directory has concrete configurations for common scenarios:
+
+- [examples/settings/](examples/settings/) — Minimal, strict, and fully-documented settings
+- [examples/hooks/](examples/hooks/) — Audit logger, notifications, safety guards
+- [examples/mcp/](examples/mcp/) — Filesystem, GitHub, and web search MCP configs
+- [examples/claude-md/](examples/claude-md/) — CLAUDE.md templates for Python, Next.js, and personal use
+
+## Customizing After Install
+
+Everything installed is meant to be edited:
+
+1. **`~/.claude/CLAUDE.md`** — Add your personal style, commit preferences, and project norms
+2. **`~/.claude/settings.json`** — Tune the permission rules for your workflow
+3. **`~/.claude/hooks/*.sh`** — Uncomment the behaviors you want
+4. **`~/.claude/commands/*.md`** — Edit the slash commands or add your own
+
+Project-specific configuration goes in `.claude/CLAUDE.md` in each project root —
+that file is loaded alongside the global one, giving you per-project customization
+without losing global rules.

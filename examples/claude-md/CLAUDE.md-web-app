@@ -1,0 +1,49 @@
+# Web App Instructions
+
+## Project
+A Next.js 14 web application using the App Router, TypeScript, Tailwind CSS,
+and Prisma ORM with PostgreSQL. State management uses Zustand for client state
+and React Query for server state. UI components are from shadcn/ui.
+
+## Commands
+- Start dev server: `npm run dev`
+- Run tests: `npm test`
+- Run e2e tests: `npx playwright test`
+- Type check: `npm run type-check`
+- Lint: `npm run lint`
+- Build: `npm run build`
+- Database migration: `npx prisma migrate dev`
+- Open Prisma Studio: `npx prisma studio`
+
+## Code Style
+- Strict TypeScript — no `any`, prefer `unknown` for truly unknown types
+- Use `'` for string literals, not `"`
+- Components: named exports, not default exports (except page.tsx and layout.tsx)
+- File names: `kebab-case.tsx` for components, `camelCase.ts` for utilities
+- Tailwind classes: group by category (layout, spacing, typography, color)
+- Use `cn()` from `lib/utils` for conditional class merging
+
+## Architecture
+- `/app` — Next.js App Router pages and layouts
+- `/components` — Reusable UI components (shadcn/ui base components in `/components/ui`)
+- `/lib` — Utilities, API clients, and shared logic
+- `/server` — Server-only code (database queries, server actions)
+- Server Components by default; add `'use client'` only when needed (event handlers, hooks)
+- Database access only from `/server` — never import Prisma in client components
+
+## API and Data
+- Server Actions for mutations — no separate API routes for simple CRUD
+- API routes (`/app/api`) only for webhooks, external integrations, or streaming
+- Use React Query for data that needs client-side caching/invalidation
+- Prisma queries go in `/server/db/` — never inline in components
+
+## Testing
+- Unit tests with Vitest for utilities and pure functions
+- Component tests with React Testing Library for interactive UI
+- Playwright for critical user flows (auth, checkout, core actions)
+
+## Do Not
+- Import server-only modules in client components (Prisma, fs, crypto secrets)
+- Use `useEffect` for data fetching — use Server Components or React Query
+- Add inline styles — everything through Tailwind
+- Use `<img>` — always use Next.js `<Image>` for automatic optimization

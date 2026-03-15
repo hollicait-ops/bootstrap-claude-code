@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  // Model to use by default. Override per-session with /model
+  "model": "claude-sonnet-4-6",
+
+  // Terminal theme
+  "theme": "dark",
+
+  // Automatically save important context to ~/.claude/memory/
+  "autoMemory": true,
+
+  // Inject git repo info into session context
+  "includeGitInstructions": true,
+
+  // Default mode: "chat" (normal) or "plan" (require plan approval before acting)
+  // "defaultMode": "plan",
+
+  "permissions": {
+    // Commands Claude can run without asking.
+    // Glob patterns: * = any chars except /, ** = any chars including /
+    "allow": [
+      // Git read operations
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git blame*)",
+      "Bash(git branch*)",
+      "Bash(git fetch*)",
+      "Bash(git stash list)",
+
+      // Git write operations (commonly safe)
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(git stash*)",
+      "Bash(git merge*)",
+      "Bash(git rebase*)",
+
+      // File system read
+      "Bash(ls*)",
+      "Bash(pwd)",
+      "Bash(cat*)",
+      "Bash(head*)",
+      "Bash(tail*)",
+      "Bash(wc*)",
+      "Bash(find*)",
+      "Bash(grep*)",
+
+      // Tool discovery
+      "Bash(which*)",
+      "Bash(* --version)",
+      "Bash(* --help)",
+
+      // Build tools
+      "Bash(npm run*)",
+      "Bash(npm test*)",
+      "Bash(npm install*)",
+      "Bash(yarn*)",
+      "Bash(pnpm*)",
+      "Bash(make*)",
+      "Bash(cargo*)",
+      "Bash(go build*)",
+      "Bash(go test*)",
+      "Bash(go fmt*)",
+      "Bash(python* -m pytest*)",
+      "Bash(python* -m unittest*)",
+
+      // File manipulation (non-destructive)
+      "Bash(mkdir -p*)",
+      "Bash(cp*)",
+      "Bash(mv*)",
+      "Bash(touch*)",
+
+      // Edit within specific directories (project-level override)
+      // "Edit(./src/**)",
+      // "Edit(./tests/**)"
+    ],
+
+    // Commands Claude is never allowed to run, even if the user asks.
+    // deny takes precedence over allow.
+    "deny": [
+      // Catastrophically destructive shell commands
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf $HOME)",
+      "Bash(rm -rf /home*)",
+
+      // Force push and hard reset (destructive git)
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git reset --hard*)",
+
+      // Privilege escalation
+      "Bash(sudo rm*)",
+      "Bash(chmod 777*)",
+
+      // Raw disk writes
+      "Bash(dd if=/dev/*)",
+
+      // Secret files — never read or edit
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/secrets/**)",
+      "Read(**/credentials.json)",
+      "Read(~/.aws/**)",
+      "Read(~/.ssh/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.config/gh/hosts.yml)",
+      "Edit(.env)",
+      "Edit(.env.*)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)"
+    ],
+
+    // Commands Claude will ask permission before running.
+    "ask": [
+      // Network pushes
+      "Bash(git push*)",
+      "Bash(npm publish*)",
+      "Bash(yarn publish*)",
+      "Bash(pnpm publish*)",
+
+      // Network requests
+      "Bash(curl*)",
+      "Bash(wget*)",
+
+      // Recursive deletes (not covered by deny)
+      "Bash(rm -rf*)"
+    ]
+  },
+
+  // Hooks are registered here by the installer after hook scripts are copied.
+  // See docs/04-hooks.md for the format.
+  "hooks": {},
+
+  // MCP server configuration. See docs/05-mcp-servers.md.
+  // "mcpServers": {
+  //   "filesystem": {
+  //     "command": "npx",
+  //     "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/dir"]
+  //   }
+  // }
+}
