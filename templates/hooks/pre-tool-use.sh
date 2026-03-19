@@ -18,10 +18,10 @@ TOOL_INPUT="${CLAUDE_TOOL_INPUT:-}"
 
 # ── Safety guard: block root/home recursive deletes ─────────────────────────
 if [[ "$TOOL_NAME" == "Bash" ]] && command -v python3 &>/dev/null; then
-  COMMAND="$(python3 -c "
-import sys, json
+  COMMAND="$(TOOL_INPUT="$TOOL_INPUT" python3 -c "
+import os, json
 try:
-    d = json.loads('''${TOOL_INPUT}''')
+    d = json.loads(os.environ['TOOL_INPUT'])
     print(d.get('command', ''))
 except Exception:
     pass
