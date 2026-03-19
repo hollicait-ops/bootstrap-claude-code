@@ -149,7 +149,7 @@ check_bash_version() {
       fi
       brew install bash
       warn "Bash upgraded. Please re-run this script with the new bash:"
-      warn "  /usr/local/bin/bash $0 $*"
+      warn "  /usr/local/bin/bash $0 $@"
       exit 0
     else
       error "Bash 4+ is required. Aborting."
