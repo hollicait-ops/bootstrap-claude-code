@@ -67,7 +67,11 @@
       "Edit(.env)",
       "Edit(.env.*)",
       "Edit(**/.env)",
-      "Edit(**/.env.*)"
+      "Edit(**/.env.*)",
+      "Write(.env)",
+      "Write(.env.*)",
+      "Write(**/.env)",
+      "Write(**/.env.*)"
     ],
     "ask": [
       "Bash(git push*)",
