@@ -28,13 +28,13 @@ except Exception:
 " 2>/dev/null)"
 
   # Block: rm -rf / or rm -rf ~
-  if echo "$COMMAND" | grep -qE 'rm[[:space:]]+-[a-zA-Z]*r[a-zA-Z]*f[[:space:]]+(/|~|/root|\$HOME)[[:space:]]*$'; then
+  if echo "$COMMAND" | grep -qE 'rm[[:space:]]+-[a-zA-Z]*r[a-zA-Z]*f[[:space:]]+(/|~|/root|\$HOME)'; then
     echo "BLOCKED: Attempted to recursively delete a root-level or home directory. This is almost certainly a mistake."
     exit 2
   fi
 
   # Block: dd if=/dev/zero targeting a whole disk
-  if echo "$COMMAND" | grep -qE 'dd[[:space:]].*of=/dev/(sd[a-z]|nvme[0-9])[[:space:]]*$'; then
+  if echo "$COMMAND" | grep -qE 'dd[[:space:]].*of=/dev/(sd[a-z]|nvme[0-9])'; then
     echo "BLOCKED: Attempted to overwrite a raw disk device with dd."
     exit 2
   fi
