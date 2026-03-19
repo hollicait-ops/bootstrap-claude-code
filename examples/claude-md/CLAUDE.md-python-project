@@ -1,0 +1,41 @@
+# Python Project Instructions
+
+## Project
+A Django REST API for a SaaS billing platform. Python 3.12, Django 5.0,
+PostgreSQL 16. The API follows RESTful conventions; authentication uses JWT
+tokens via djangorestframework-simplejwt.
+
+## Commands
+- Start dev server: `python manage.py runserver`
+- Run tests: `pytest tests/ -v`
+- Run a specific test: `pytest tests/test_billing.py::TestInvoice::test_create -v`
+- Lint: `ruff check .`
+- Format: `ruff format .`
+- Type check: `mypy src/`
+- Database migration: `python manage.py migrate`
+- Create migration: `python manage.py makemigrations`
+
+## Code Style
+- Type hints on all function signatures (mypy strict mode)
+- Use `Decimal` for all monetary amounts — never `float`
+- Model fields use `snake_case`; API response fields use `camelCase` (serializer handles conversion)
+- Avoid bare `except:` — always catch specific exceptions
+- Use `select_related` / `prefetch_related` to avoid N+1 queries
+
+## Architecture
+- Business logic lives in `src/services/`, never in views or serializers
+- Views are thin — call a service, serialize the result, return the response
+- Database models are in `src/models/`; never import from `src/api/` in models
+- All email sending goes through `src/notifications/email.py` — never call Django's mail directly
+
+## Testing
+- Integration tests use a real test database (`TEST_DATABASE_URL` env var)
+- Never mock the database or ORM — if it needs to touch the DB, let it
+- Factories are in `tests/factories/` (factory_boy)
+- Each API endpoint must have at least one integration test
+
+## Do Not
+- Use `print()` for debugging — use `logging.getLogger(__name__)`
+- Create migrations without reviewing the generated SQL: `sqlmigrate`
+- Commit with failing tests or mypy errors
+- Store monetary values as floats anywhere in the codebase

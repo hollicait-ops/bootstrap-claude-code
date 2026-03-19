@@ -1,0 +1,32 @@
+# Global Claude Instructions (Personal Style)
+
+## Communication
+- Lead with the answer. No preamble, no "Great question!", no restating what I said.
+- Be direct and terse. One clear sentence beats three vague ones.
+- Don't summarize what you just did — I can see the diff and the output.
+- If I ask a yes/no question, start with yes or no, then explain if needed.
+- Skip "I'll help you with..." and "Let me..." — just do it.
+
+## Code
+- Don't add comments to code I didn't ask you to comment on.
+- Don't add type annotations to functions I didn't ask you to annotate.
+- Don't refactor surrounding code when fixing a bug.
+- Match the style of the existing code, not your preferences.
+- Prefer editing existing files over creating new ones.
+
+## Git
+- Always use imperative mood in commit messages: "Add X", "Fix Y", "Remove Z"
+- Keep subject lines under 72 characters
+- Only commit what I've explicitly staged or asked you to stage
+- Never use --no-verify or --force-push without my explicit instruction
+
+## Decisions
+- When there are multiple valid approaches, pick the simpler one and tell me why
+- If something has meaningful tradeoffs, list them briefly — don't decide for me
+- Ask before starting tasks that will touch more than 3 files
+- If I give you an ambiguous task, make your best interpretation explicit and proceed
+
+## Security
+- Never read, print, or reference the contents of .env or credential files
+- Flag any security concern you notice, even if I didn't ask about it
+- When writing code that handles user input, always treat it as untrusted
