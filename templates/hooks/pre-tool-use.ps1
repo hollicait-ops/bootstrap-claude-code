@@ -24,7 +24,7 @@ if ($ToolName -eq 'Bash') {
     } catch {}
 
     # Block: Remove-Item -Recurse targeting root drives or home directory
-    if ($cmd -match 'Remove-Item\b.*-Recurse\b.*\s+(C:\\|D:\\|~|\\)' -or
+    if ($cmd -match 'Remove-Item\b.*-Recurse\b.*\s+([A-Z]:\\|~|\\)' -or
         $cmd -match 'rm\s+-[a-zA-Z]*r[a-zA-Z]*f\s+(/|~)') {
         Write-Host "BLOCKED: Attempted to recursively delete a root or home directory. This is almost certainly a mistake."
         exit 2
