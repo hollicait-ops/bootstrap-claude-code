@@ -103,7 +103,17 @@ if [[ -n "$RESTORE_BACKUP" ]]; then
   for backed_up in "${RESTORE_BACKUP}"/*; do
     name="$(basename "$backed_up")"
     if [[ -f "$backed_up" ]]; then
-      dry cp "$backed_up" "${CLAUDE_DIR}/${name}"
+      dst="${CLAUDE_DIR}/${name}"
+      if [[ -f "$dst" ]]; then
+        # Skip files modified after the backup was taken
+        backup_mtime="$(stat -c %Y "$backed_up" 2>/dev/null || stat -f %m "$backed_up" 2>/dev/null || echo 0)"
+        current_mtime="$(stat -c %Y "$dst" 2>/dev/null || stat -f %m "$dst" 2>/dev/null || echo 0)"
+        if [[ "$current_mtime" -gt "$backup_mtime" ]]; then
+          warn "Skipping ~/.claude/${name} — modified after backup was taken (remove manually to restore)"
+          continue
+        fi
+      fi
+      dry cp "$backed_up" "$dst"
       ok "Restored: ~/.claude/${name}"
     elif [[ -d "$backed_up" ]]; then
       dry cp -r "$backed_up" "${CLAUDE_DIR}/${name}"

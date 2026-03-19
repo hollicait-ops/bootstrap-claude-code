@@ -96,6 +96,15 @@ if ($RestoreBackup) {
             }
             Ok "Restored: ~/.claude/$($item.Name)/"
         } else {
+            # Skip files modified after the backup was taken
+            if (Test-Path $dst -PathType Leaf) {
+                $currentMtime = (Get-Item $dst).LastWriteTime
+                $backupMtime  = $item.LastWriteTime
+                if ($currentMtime -gt $backupMtime) {
+                    Warn "Skipping ~/.claude/$($item.Name) — modified after backup was taken (remove manually to restore)"
+                    continue
+                }
+            }
             Invoke-Dry "Restore file ~/.claude/$($item.Name)" {
                 Copy-Item $item.FullName $dst -Force
             }
