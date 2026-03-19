@@ -17,7 +17,9 @@ TOOL_NAME="${CLAUDE_TOOL_NAME:-}"
 TOOL_INPUT="${CLAUDE_TOOL_INPUT:-}"
 
 # ── Safety guard: block root/home recursive deletes ─────────────────────────
-if [[ "$TOOL_NAME" == "Bash" ]] && command -v python3 &>/dev/null; then
+if [[ "$TOOL_NAME" == "Bash" ]] && ! command -v python3 &>/dev/null; then
+  echo "Warning: python3 not found — recursive-delete safety guard is disabled" >&2
+elif [[ "$TOOL_NAME" == "Bash" ]]; then
   COMMAND="$(TOOL_INPUT="$TOOL_INPUT" python3 -c "
 import os, json
 try:
