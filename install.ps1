@@ -266,7 +266,7 @@ function Merge-SettingsJson ([string]$SourcePath, [string]$TargetPath) {
             if ($src.permissions.$key) {
                 $existing = if ($tgt.permissions.$key) { @($tgt.permissions.$key) } else { @() }
                 $toAdd    = @($src.permissions.$key) | Where-Object { $_ -notin $existing }
-                Set-ObjProp $tgt.permissions $key ($existing + $toAdd)
+                Set-ObjProp $tgt.permissions $key ([object[]]($existing + $toAdd))
             }
         }
     }
@@ -302,7 +302,7 @@ function Merge-KeybindingsJson ([string]$SourcePath, [string]$TargetPath) {
     $existingKeys = $tgt | ForEach-Object { $_.key }
     $toAdd        = $src | Where-Object { $_.key -notin $existingKeys }
 
-    return (@($tgt) + @($toAdd)) | ConvertTo-Json -Depth 5
+    return ([object[]](@($tgt) + @($toAdd))) | ConvertTo-Json -Depth 5
 }
 
 function Install-SettingsJson {
