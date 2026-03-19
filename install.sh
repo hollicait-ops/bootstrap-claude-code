@@ -472,7 +472,8 @@ install_claude_md() {
   if [[ -f "$dst" ]]; then
     if grep -q "$sentinel_begin" "$dst"; then
       # Update existing bootstrap section
-      python3 - "$dst" "$sentinel_begin" "$sentinel_end" "$src" <<'PYEOF'
+      if command -v python3 &>/dev/null; then
+        python3 - "$dst" "$sentinel_begin" "$sentinel_end" "$src" <<'PYEOF'
 import sys, re
 
 dst_path, begin, end, src_path = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
@@ -490,7 +491,11 @@ updated = re.sub(pattern, replacement, existing, flags=re.DOTALL)
 with open(dst_path, 'w') as f:
     f.write(updated)
 PYEOF
-      ok "CLAUDE.md updated (existing bootstrap section replaced)"
+        ok "CLAUDE.md updated (existing bootstrap section replaced)"
+      else
+        warn "python3 not found — cannot update existing bootstrap section. Remove the sentinel manually and re-run."
+        return
+      fi
     else
       # Append new bootstrap section
       {
