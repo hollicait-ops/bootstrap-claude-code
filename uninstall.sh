@@ -26,11 +26,11 @@ heading() { echo -e "\n${BOLD}$*${RESET}"; }
 DRY_RUN=false
 RESTORE_BACKUP=""
 
-for arg in "$@"; do
-  case "$arg" in
+while [[ $# -gt 0 ]]; do
+  case "$1" in
     --dry-run)           DRY_RUN=true ;;
     --restore-backup)    RESTORE_BACKUP="${2:-}" ; shift ;;
-    --restore-backup=*)  RESTORE_BACKUP="${arg#*=}" ;;
+    --restore-backup=*)  RESTORE_BACKUP="${1#*=}" ;;
     --help|-h)
       echo "Usage: $0 [--restore-backup <backup-dir>] [--dry-run]"
       echo ""
@@ -40,6 +40,7 @@ for arg in "$@"; do
       ;;
     *) ;;
   esac
+  shift
 done
 
 dry() {
