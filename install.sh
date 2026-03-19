@@ -78,6 +78,8 @@ install_package() {
   local pkg_name="$1"
   local brew_name="${2:-$pkg_name}"
   local apt_name="${3:-$pkg_name}"
+  local dnf_name="${4:-$apt_name}"
+  local pacman_name="${5:-$apt_name}"
   local pkg_mgr
   pkg_mgr="$(detect_pkg_manager)"
 
@@ -91,10 +93,10 @@ install_package() {
       sudo apt-get install -y "$apt_name"
       ;;
     dnf)
-      sudo dnf install -y "$apt_name"
+      sudo dnf install -y "$dnf_name"
       ;;
     pacman)
-      sudo pacman -S --noconfirm "$apt_name"
+      sudo pacman -S --noconfirm "$pacman_name"
       ;;
     *)
       error "No supported package manager found. Please install ${pkg_name} manually."
