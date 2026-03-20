@@ -169,6 +169,7 @@ The `docs/` directory contains a complete reference for every Claude Code featur
 - [docs/08-plan-mode.md](docs/08-plan-mode.md) — Structured planning before execution
 - [docs/09-subagents.md](docs/09-subagents.md) — Parallel and specialized subagents
 - [docs/10-advanced-patterns.md](docs/10-advanced-patterns.md) — Combining features for powerful workflows
+- [docs/11-troubleshooting.md](docs/11-troubleshooting.md) — Common problems and how to fix them
 
 ## Examples
 
