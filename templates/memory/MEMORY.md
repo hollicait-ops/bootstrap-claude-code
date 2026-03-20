@@ -24,6 +24,22 @@ to this index.
 <!-- Claude will add entries here as they are created -->
 <!-- Format: - [entry-name.md](entry-name.md) — one-line description -->
 
+<!--
+EXAMPLES — copy, uncomment, and edit these to get started:
+
+(user) Developer role and preferred stack
+- [user-profile.md](user-profile.md) — Senior full-stack developer; prefers TypeScript + React on the frontend and Python/FastAPI on the backend; values concise code over heavy abstraction.
+
+(feedback) Code style correction
+- [feedback-no-default-exports.md](feedback-no-default-exports.md) — Always use named exports in TypeScript modules.
+  Why: default exports make refactoring and auto-import harder across the codebase.
+  How to apply: replace `export default function Foo` with `export function Foo` in every new or edited file.
+
+(project) Current sprint goal
+- [project-auth-overhaul.md](project-auth-overhaul.md) — Sprint 14 goal: migrate session-based auth to JWT + refresh-token flow by 2026-04-01.
+  Motivation: remove the Redis session store dependency and unblock the stateless horizontal-scaling work.
+-->
+
 ## Tips
 
 - Ask Claude to "remember" something and it will save it here automatically.
