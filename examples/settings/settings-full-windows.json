@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  // Windows-specific version of settings-full.json.
+  // Replace C:\Users\you with your actual %USERPROFILE% path throughout.
+  // If your username contains spaces, quote the hook file path:
+  //   -File "C:\Users\Jane Doe\.claude\hooks\pre-tool-use.ps1"
+  //
+  // Use powershell.exe instead of pwsh if PowerShell 7 is not installed.
+
+  "model": "claude-sonnet-4-6",
+  "theme": "dark",
+  "autoMemory": true,
+  "includeGitInstructions": true,
+
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git blame*)",
+      "Bash(git branch*)",
+      "Bash(git fetch*)",
+      "Bash(git stash list)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(git stash*)",
+      "Bash(git merge*)",
+      "Bash(git rebase*)",
+      "Bash(ls*)",
+      "Bash(pwd)",
+      "Bash(cat*)",
+      "Bash(head*)",
+      "Bash(tail*)",
+      "Bash(wc*)",
+      "Bash(find*)",
+      "Bash(grep*)",
+      "Bash(which*)",
+      "Bash(* --version)",
+      "Bash(* --help)",
+      "Bash(npm run*)",
+      "Bash(npm test*)",
+      "Bash(npm install*)",
+      "Bash(yarn*)",
+      "Bash(pnpm*)",
+      "Bash(make*)",
+      "Bash(cargo*)",
+      "Bash(go build*)",
+      "Bash(go test*)",
+      "Bash(go fmt*)",
+      "Bash(python* -m pytest*)",
+      "Bash(python* -m unittest*)",
+      "Bash(mkdir -p*)",
+      "Bash(cp*)",
+      "Bash(mv*)",
+      "Bash(touch*)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf $HOME)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git reset --hard*)",
+      "Bash(sudo rm*)",
+      "Bash(chmod 777*)",
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/secrets/**)",
+      "Read(**/credentials.json)",
+      "Edit(.env)",
+      "Edit(.env.*)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)"
+    ],
+    "ask": [
+      "Bash(git push*)",
+      "Bash(npm publish*)",
+      "Bash(curl*)",
+      "Bash(wget*)",
+      "Bash(rm -rf*)"
+    ]
+  },
+
+  // Windows hook registration.
+  // The install.ps1 installer writes this block automatically.
+  // To register manually, replace C:\Users\you with your %USERPROFILE% path.
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\pre-tool-use.ps1"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\post-tool-use.ps1"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\stop.ps1"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\session-start.ps1"
+          }
+        ]
+      }
+    ]
+  }
+}

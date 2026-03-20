@@ -135,6 +135,29 @@
 
   // Hooks are registered here by the installer after hook scripts are copied.
   // See docs/04-hooks.md for the format.
+  //
+  // Unix/macOS — the installer writes this automatically:
+  //   "hooks": {
+  //     "PreToolUse":   [{"matcher":"*","hooks":[{"type":"command","command":"/home/you/.claude/hooks/pre-tool-use.sh"}]}],
+  //     "PostToolUse":  [{"matcher":"*","hooks":[{"type":"command","command":"/home/you/.claude/hooks/post-tool-use.sh"}]}],
+  //     "Stop":         [{"hooks":[{"type":"command","command":"/home/you/.claude/hooks/stop.sh"}]}],
+  //     "SessionStart": [{"hooks":[{"type":"command","command":"/home/you/.claude/hooks/session-start.sh"}]}]
+  //   }
+  //
+  // Windows — Claude Code cannot execute .ps1 files directly. Wrap every hook
+  // command in a pwsh invocation. Replace C:\Users\you with your %USERPROFILE%.
+  // Use powershell.exe if PowerShell 7 (pwsh) is not installed.
+  // If your username contains spaces, quote the file path (see last note below).
+  //
+  //   "hooks": {
+  //     "PreToolUse":   [{"matcher":"*","hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\pre-tool-use.ps1"}]}],
+  //     "PostToolUse":  [{"matcher":"*","hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\post-tool-use.ps1"}]}],
+  //     "Stop":         [{"hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\stop.ps1"}]}],
+  //     "SessionStart": [{"hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\session-start.ps1"}]}]
+  //   }
+  //
+  // Spaces in path: -File "C:\\Users\\Jane Doe\\.claude\\hooks\\pre-tool-use.ps1"
+  // See also: examples/settings/settings-full-windows.json
   "hooks": {},
 
   // MCP server configuration. See docs/05-mcp-servers.md.
