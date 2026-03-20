@@ -561,6 +561,7 @@ function Invoke-Verify {
         Assert-Exists (Join-Path $ClaudeDir "hooks\stop.ps1")          "~/.claude/hooks/stop.ps1"
         Assert-Exists (Join-Path $ClaudeDir "commands\commit.md")      "~/.claude/commands/commit.md"
         Assert-Exists (Join-Path $ClaudeDir "commands\review-pr.md")   "~/.claude/commands/review-pr.md"
+        Assert-Exists (Join-Path $ClaudeDir "commands\fix-bug.md")     "~/.claude/commands/fix-bug.md"
     }
 
     Assert-ValidJson (Join-Path $ClaudeDir "settings.json")   "~/.claude/settings.json"
