@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# tests/run-tests.sh — Run the full unit test suite (bash + Python)
-# Usage: ./tests/run-tests.sh [--unit] [--all]
+# tests/run-tests.sh — Run the full test suite (bash + Python + integration)
+# Usage: ./tests/run-tests.sh [--unit] [--integration] [--all]
 #
-# Runs by default: Python unit tests (pytest) + BATS unit tests
+# Runs by default: Python unit tests (pytest) + BATS unit tests + BATS integration tests
 
 set -euo pipefail
 
@@ -59,6 +59,20 @@ else
     ok "BATS unit tests passed"
   else
     err "BATS unit tests failed"
+  fi
+fi
+
+# ─── BATS integration tests ──────────────────────────────────────────────────
+
+header "BATS integration tests (installer phases)"
+
+if ! command -v bats &>/dev/null; then
+  warn "bats not found — skipping integration tests"
+else
+  if bats "${TESTS_DIR}/integration/test_install.bats" 2>&1; then
+    ok "BATS integration tests passed"
+  else
+    err "BATS integration tests failed"
   fi
 fi
 
