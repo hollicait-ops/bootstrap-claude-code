@@ -65,12 +65,12 @@ Then re-run `./install.sh --force` to re-merge settings correctly.
 | Exit code | Meaning |
 |-----------|---------|
 | `0` | Allow the tool call to proceed |
-| `2` | Block the tool call (Claude sees an error message) |
-| Any other | Treated as an error; tool may still run |
+| `2` | Block the tool call; stderr is shown to Claude as an error message (only `PreToolUse` hooks can block) |
+| Any other | Non-blocking error; stderr is shown in verbose mode (`Ctrl+O`) and execution continues |
 
 **Fix:** Check your hook's exit path:
 ```bash
-# Block the call
+# Block the call (PreToolUse only)
 echo "Blocked: reason" >&2
 exit 2
 
