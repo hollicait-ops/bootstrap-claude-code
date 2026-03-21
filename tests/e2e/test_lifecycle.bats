@@ -100,7 +100,8 @@ skip_if_no_python3() {
 
 @test "lifecycle: empty hooks directory is removed after uninstall" {
   run_installer
-  run_uninstaller
+  run run_uninstaller
+  [ "$status" -eq 0 ]
 
   # Directory must be gone or, if it still exists, must be empty
   [ ! -d "${CLAUDE_DIR}/hooks" ] || [ -z "$(ls -A "${CLAUDE_DIR}/hooks" 2>/dev/null)" ]
@@ -108,7 +109,8 @@ skip_if_no_python3() {
 
 @test "lifecycle: empty commands directory is removed after uninstall" {
   run_installer
-  run_uninstaller
+  run run_uninstaller
+  [ "$status" -eq 0 ]
 
   [ ! -d "${CLAUDE_DIR}/commands" ] || [ -z "$(ls -A "${CLAUDE_DIR}/commands" 2>/dev/null)" ]
 }
