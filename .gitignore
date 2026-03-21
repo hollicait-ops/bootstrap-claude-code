@@ -1,0 +1,8 @@
+
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
