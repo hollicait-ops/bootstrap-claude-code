@@ -725,6 +725,7 @@ verify() {
     assert_executable "${CLAUDE_DIR}/hooks/stop.sh"           "~/.claude/hooks/stop.sh"
     assert_exists "${CLAUDE_DIR}/commands/commit.md"   "~/.claude/commands/commit.md"
     assert_exists "${CLAUDE_DIR}/commands/review-pr.md" "~/.claude/commands/review-pr.md"
+    assert_exists "${CLAUDE_DIR}/commands/fix-bug.md"  "~/.claude/commands/fix-bug.md"
   fi
 
   if command -v python3 &>/dev/null; then

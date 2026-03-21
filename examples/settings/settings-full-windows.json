@@ -1,32 +1,41 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  // Windows-specific version of settings-full.json.
+  // Replace C:\Users\you with your actual %USERPROFILE% path throughout.
+  // Hook paths are quoted by default to handle usernames that contain spaces.
+  //
+  // Use powershell.exe instead of pwsh if PowerShell 7 is not installed.
+
   "model": "claude-sonnet-4-6",
   "theme": "dark",
   "autoMemory": true,
   "includeGitInstructions": true,
+
   "permissions": {
     "allow": [
       "Bash(git status)",
       "Bash(git diff*)",
       "Bash(git log*)",
-      "Bash(git add*)",
-      "Bash(git commit*)",
-      "Bash(git stash*)",
-      "Bash(git branch*)",
-      "Bash(git checkout*)",
-      "Bash(git fetch*)",
-      "Bash(git merge*)",
-      "Bash(git rebase*)",
       "Bash(git show*)",
       "Bash(git blame*)",
+      "Bash(git branch*)",
+      "Bash(git fetch*)",
+      "Bash(git stash list)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(git stash*)",
+      "Bash(git merge*)",
+      "Bash(git rebase*)",
       "Bash(ls*)",
       "Bash(pwd)",
       "Bash(cat*)",
       "Bash(head*)",
       "Bash(tail*)",
-      "Bash(grep*)",
-      "Bash(find*)",
       "Bash(wc*)",
+      "Bash(find*)",
+      "Bash(grep*)",
       "Bash(which*)",
       "Bash(* --version)",
       "Bash(* --help)",
@@ -92,8 +101,8 @@
       "Bash(git push -f*)",
       "Bash(git push --force-with-lease*)",
       "Bash(git reset --hard*)",
-      "Bash(chmod 777*)",
       "Bash(sudo rm*)",
+      "Bash(chmod 777*)",
       "Read(.env)",
       "Read(.env.*)",
       "Read(**/.env)",
@@ -141,5 +150,52 @@
       "Bash(tofu destroy*)"
     ]
   },
-  "hooks": {}
+
+  // Windows hook registration.
+  // The install.ps1 installer writes this block automatically.
+  // To register manually, replace C:\Users\you with your %USERPROFILE% path.
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\pre-tool-use.ps1\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\post-tool-use.ps1\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\stop.ps1\""
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\session-start.ps1\""
+          }
+        ]
+      }
+    ]
+  }
 }

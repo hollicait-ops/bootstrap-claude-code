@@ -118,7 +118,8 @@ function Invoke-CheckClaude {
             }
         }
         npm install -g @anthropic-ai/claude-code
-        Ok "Claude Code installed: $((Get-Command claude -ErrorAction SilentlyContinue)?.Source)"
+        $claudeCmd = Get-Command claude -ErrorAction SilentlyContinue
+        Ok "Claude Code installed: $(if ($claudeCmd) { $claudeCmd.Source } else { 'unknown location' })"
     } else {
         Warn "Continuing without Claude Code — configs will be pre-staged for when you install it."
     }
@@ -432,8 +433,8 @@ function Register-HooksInSettings {
         SessionStart = 'session-start.ps1'
     }
 
-    foreach ($event in $hookMap.Keys) {
-        $scriptName = $hookMap[$event]
+    foreach ($hookName in $hookMap.Keys) {
+        $scriptName = $hookMap[$hookName]
         $scriptPath = Join-Path $hooksDir $scriptName
         if (-not (Test-Path $scriptPath)) { continue }
 
@@ -442,12 +443,12 @@ function Register-HooksInSettings {
         $hookCommand = "$pwshExe -NonInteractive -ExecutionPolicy Bypass -File $quotedPath"
         $hookEntry   = @(@{ type = "command"; command = $hookCommand })
 
-        if (-not $settings.hooks.PSObject.Properties[$event]) {
-            if ($event -in @('PreToolUse', 'PostToolUse')) {
-                $settings.hooks | Add-Member -MemberType NoteProperty -Name $event `
+        if (-not $settings.hooks.PSObject.Properties[$hookName]) {
+            if ($hookName -in @('PreToolUse', 'PostToolUse')) {
+                $settings.hooks | Add-Member -MemberType NoteProperty -Name $hookName `
                     -Value @(@{ matcher = "*"; hooks = $hookEntry })
             } else {
-                $settings.hooks | Add-Member -MemberType NoteProperty -Name $event `
+                $settings.hooks | Add-Member -MemberType NoteProperty -Name $hookName `
                     -Value @(@{ hooks = $hookEntry })
             }
         }
@@ -561,6 +562,7 @@ function Invoke-Verify {
         Assert-Exists (Join-Path $ClaudeDir "hooks\stop.ps1")          "~/.claude/hooks/stop.ps1"
         Assert-Exists (Join-Path $ClaudeDir "commands\commit.md")      "~/.claude/commands/commit.md"
         Assert-Exists (Join-Path $ClaudeDir "commands\review-pr.md")   "~/.claude/commands/review-pr.md"
+        Assert-Exists (Join-Path $ClaudeDir "commands\fix-bug.md")     "~/.claude/commands/fix-bug.md"
     }
 
     Assert-ValidJson (Join-Path $ClaudeDir "settings.json")   "~/.claude/settings.json"

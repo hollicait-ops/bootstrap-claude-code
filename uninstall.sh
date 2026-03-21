@@ -78,6 +78,7 @@ INSTALLED_FILES=(
   "${CLAUDE_DIR}/commands/review-pr.md"
   "${CLAUDE_DIR}/commands/security-check.md"
   "${CLAUDE_DIR}/commands/daily-standup.md"
+  "${CLAUDE_DIR}/commands/fix-bug.md"
   "${CLAUDE_DIR}/.bootstrapper-version"
 )
 

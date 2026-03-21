@@ -37,6 +37,17 @@ if ($ToolName -eq 'Bash') {
     }
 }
 
+# ── Optional: pre-warm bash before each Bash tool call (Windows) ─────────────
+# Spawns a throwaway bash process before the actual tool call. If bash stalls
+# during MSYS2 runtime init, the job is killed after 4 s and the real call
+# proceeds with the runtime partially warm — reducing sporadic freeze risk.
+#
+# if ($ToolName -eq 'Bash') {
+#     $warmJob = Start-Job { bash -c "exit 0" 2>$null }
+#     $null = $warmJob | Wait-Job -Timeout 4
+#     $warmJob | Remove-Job -Force
+# }
+
 # ── Optional: log every tool call to an audit file ───────────────────────────
 # $LogFile  = Join-Path $HOME ".claude\tool-audit.log"
 # $stamp    = (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ')

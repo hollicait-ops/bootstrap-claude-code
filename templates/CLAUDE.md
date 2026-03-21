@@ -20,6 +20,13 @@ and ask — it's easier to add than undo.
 - Always run `git status` before staging or committing.
 - Never use `--no-verify` or `--force-push` without being explicitly asked.
 
+## Testing
+- Before making changes, run the existing test suite to confirm the baseline passes.
+- When fixing a bug, write a failing test that reproduces it before touching any code.
+- Do not write code that cannot be verified by a test or observable output.
+- Prefer narrow, targeted unit tests over broad integration tests for new logic.
+- Never delete or weaken a test to make a build pass.
+
 ## Security Mindset
 - Never read, print, or reference the contents of `.env` files, secret files,
   or credential files. If you encounter one, acknowledge it and move on.

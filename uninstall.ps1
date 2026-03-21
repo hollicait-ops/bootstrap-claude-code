@@ -66,6 +66,7 @@ $installedFiles = @(
     (Join-Path $ClaudeDir "commands\review-pr.md"),
     (Join-Path $ClaudeDir "commands\security-check.md"),
     (Join-Path $ClaudeDir "commands\daily-standup.md"),
+    (Join-Path $ClaudeDir "commands\fix-bug.md"),
     $VersionFile
 )
 
