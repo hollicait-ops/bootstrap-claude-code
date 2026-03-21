@@ -4,6 +4,9 @@
 # All behaviors below are commented out — opt in by uncommenting.
 
 # ── Optional: Windows balloon tip notification (via System.Windows.Forms) ─────
+# NOTE: The Start-Sleep below is required — without it, the script exits before
+# the balloon tip has time to display. This is expected in a hook context where
+# the process terminates immediately after the script returns.
 # Add-Type -AssemblyName System.Windows.Forms
 # $notify        = New-Object System.Windows.Forms.NotifyIcon
 # $notify.Icon   = [System.Drawing.SystemIcons]::Information
