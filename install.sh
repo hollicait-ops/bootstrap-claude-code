@@ -370,7 +370,7 @@ install_claude_md() {
     if grep -q "$sentinel_begin" "$dst"; then
       # Update existing bootstrap section
       if command -v python3 &>/dev/null; then
-        python3 "${SCRIPT_DIR}/lib/update_claude_md.py" "$dst" "$sentinel_begin" "$sentinel_end" "$src"
+        python3 "${SCRIPT_DIR}/lib/update_claude_md.py" "$dst" "$src"
         ok "CLAUDE.md updated (existing bootstrap section replaced)"
       else
         warn "python3 not found — cannot update existing bootstrap section. Remove the sentinel manually and re-run."

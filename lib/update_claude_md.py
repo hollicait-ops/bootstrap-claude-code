@@ -45,14 +45,12 @@ def apply(dst_content: str, src_content: str) -> str:
 
 
 if __name__ == "__main__":
-    # Called by install.sh: dst_path sentinel_begin sentinel_end src_path
-    dst_path, begin, end, src_path = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+    # Called by install.sh: dst_path src_path
+    dst_path, src_path = sys.argv[1], sys.argv[2]
     with open(src_path) as f:
         new_content = f.read().strip()
     with open(dst_path) as f:
         existing = f.read()
-    pattern = re.escape(begin) + r".*?" + re.escape(end)
-    replacement = f"{begin}\n{new_content}\n{end}"
-    updated = re.sub(pattern, replacement, existing, flags=re.DOTALL)
+    updated = apply(existing, new_content)
     with open(dst_path, "w") as f:
         f.write(updated)
