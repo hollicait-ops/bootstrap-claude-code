@@ -3,8 +3,7 @@
 
   // Windows-specific version of settings-full.json.
   // Replace C:\Users\you with your actual %USERPROFILE% path throughout.
-  // If your username contains spaces, quote the hook file path:
-  //   -File "C:\Users\Jane Doe\.claude\hooks\pre-tool-use.ps1"
+  // Hook paths are quoted by default to handle usernames that contain spaces.
   //
   // Use powershell.exe instead of pwsh if PowerShell 7 is not installed.
 
@@ -96,7 +95,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\pre-tool-use.ps1"
+            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\pre-tool-use.ps1\""
           }
         ]
       }
@@ -107,7 +106,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\post-tool-use.ps1"
+            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\post-tool-use.ps1\""
           }
         ]
       }
@@ -117,7 +116,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\stop.ps1"
+            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\stop.ps1\""
           }
         ]
       }
@@ -127,7 +126,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\session-start.ps1"
+            "command": "pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\session-start.ps1\""
           }
         ]
       }
