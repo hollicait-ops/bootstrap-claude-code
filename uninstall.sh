@@ -136,7 +136,9 @@ fi
 heading "Removing bootstrapper files"
 
 # List available backups
-BACKUPS=("${CLAUDE_DIR}"/bootstrapper-backup-* 2>/dev/null || true)
+shopt -s nullglob
+BACKUPS=("${CLAUDE_DIR}"/bootstrapper-backup-*)
+shopt -u nullglob
 if (( ${#BACKUPS[@]} > 0 )) && [[ -d "${BACKUPS[0]}" ]]; then
   echo ""
   log "Available backups (to restore, re-run with --restore-backup <path>):"
