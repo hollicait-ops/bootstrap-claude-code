@@ -217,7 +217,6 @@ EOF
   run_uninstaller --restore-backup "$backup_dir"
 
   # Hooks directory from backup should have been restored with executable bits
-  if [ -f "${CLAUDE_DIR}/hooks/pre-tool-use.sh" ]; then
-    [ -x "${CLAUDE_DIR}/hooks/pre-tool-use.sh" ]
-  fi
+  [ -f "${CLAUDE_DIR}/hooks/pre-tool-use.sh" ]
+  [ -x "${CLAUDE_DIR}/hooks/pre-tool-use.sh" ]
 }
