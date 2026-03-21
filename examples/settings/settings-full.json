@@ -113,7 +113,11 @@
       "Edit(.env)",
       "Edit(.env.*)",
       "Edit(**/.env)",
-      "Edit(**/.env.*)"
+      "Edit(**/.env.*)",
+      "Write(.env)",
+      "Write(.env.*)",
+      "Write(**/.env)",
+      "Write(**/.env.*)"
     ],
 
     // Commands Claude will ask permission before running.
