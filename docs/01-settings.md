@@ -12,6 +12,11 @@ Claude Code settings control model selection, permissions, hooks, and behavior.
 
 Project settings override global settings. Local settings override project settings.
 
+> **Note:** Claude Code's settings parser accepts `//` line comments (JSONC format).
+> Comments are stripped before parsing, so you can annotate your settings freely.
+> Standard JSON validators (e.g. `python3 -m json.tool`) will reject commented files —
+> use a JSONC-aware linter such as VS Code's built-in JSON language server instead.
+
 ## Core Settings
 
 ```json
