@@ -8,21 +8,19 @@
 #      "PostToolUse": [{"matcher":"*","hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\audit-logger.ps1\""}]}]
 #
 # The log file is created at $HOME\.claude\tool-audit.log
-# Each line: ISO timestamp, hook phase (PRE/POST), tool name, and truncated input.
+# Each line: UTC timestamp, tool name, and truncated input.
 
-$LogFile  = Join-Path $HOME ".claude\tool-audit.log"
+$LogFile   = Join-Path $HOME ".claude\tool-audit.log"
 $ToolName  = $env:CLAUDE_TOOL_NAME
 $ToolInput = $env:CLAUDE_TOOL_INPUT
-$HookName  = $env:CLAUDE_HOOK_NAME  # "PreToolUse" or "PostToolUse"
 
-$phase = if ($HookName -eq 'PreToolUse') { 'PRE ' } else { 'POST' }
-$stamp = (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ')
+$stamp = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
 
 # Truncate input to 200 chars to keep log lines readable
-$inputPreview = if ($ToolInput.Length -gt 200) { $ToolInput.Substring(0, 200) + '...' } else { $ToolInput }
+$inputPreview = if ($ToolInput -and $ToolInput.Length -gt 200) { $ToolInput.Substring(0, 200) + '...' } else { $ToolInput }
 # Collapse whitespace for compactness
 $inputPreview = $inputPreview -replace '\s+', ' '
 
-Add-Content -Path $LogFile -Value "$stamp $phase TOOL=$ToolName INPUT=$inputPreview"
+Add-Content -Path $LogFile -Value "$stamp TOOL=$ToolName INPUT=$inputPreview"
 
 exit 0

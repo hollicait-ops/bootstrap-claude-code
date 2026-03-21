@@ -8,10 +8,18 @@
 #      "Stop": [{"hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\stop.ps1\""}]}]
 #
 # Two notification methods are provided — use whichever fits your setup.
-# Method A uses only built-in Windows APIs (no extra modules required).
-# Method B uses BurntToast for a modern Windows 10/11 toast notification.
+# Method A uses BurntToast for a modern Windows 10/11 toast notification (install once).
+# Method B uses only built-in Windows APIs (no extra modules required).
 
-# ── Method A: balloon tip via System.Windows.Forms (built-in, no install needed) ──
+# ── Method A: modern toast via BurntToast module (install once, then uncomment) ──
+#
+# Install-Module BurntToast -Scope CurrentUser   # run once in a PowerShell window
+#
+# if (Get-Command New-BurntToastNotification -ErrorAction SilentlyContinue) {
+#     New-BurntToastNotification -Text "Claude Code", "Claude has finished." -Silent
+# }
+
+# ── Method B: balloon tip via System.Windows.Forms (built-in, no install needed) ──
 #
 # NOTE: Start-Sleep is required here. Without it the script exits before the
 # balloon tip has time to display, because the hook process terminates immediately.
@@ -23,13 +31,5 @@ $notify.Visible = $true
 $notify.ShowBalloonTip(3000, "Claude Code", "Claude has finished.", [System.Windows.Forms.ToolTipIcon]::Info)
 Start-Sleep -Milliseconds 3500
 $notify.Dispose()
-
-# ── Method B: modern toast via BurntToast module (install once, then uncomment) ──
-#
-# Install-Module BurntToast -Scope CurrentUser   # run once in a PowerShell window
-#
-# if (Get-Command New-BurntToastNotification -ErrorAction SilentlyContinue) {
-#     New-BurntToastNotification -Text "Claude Code", "Claude has finished." -Silent
-# }
 
 exit 0

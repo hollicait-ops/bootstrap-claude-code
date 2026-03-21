@@ -1,6 +1,6 @@
 ---
 description: Diagnose and fix a bug with root-cause discipline
-allowed-tools: Bash, Read, Edit, Write, Glob, Grep
+allowed-tools: Bash, Read, Edit, Write, Glob, Grep, TodoWrite
 ---
 
 Diagnose and fix the bug described or implied by the current context (failing test, error message, or user description).

@@ -111,6 +111,8 @@
       "Read(~/.aws/**)",
       "Read(~/.ssh/**)",
       "Read(~/.gnupg/**)",
+      "Read(~/.config/gh/hosts.yml)",
+      "Bash(dd if=/dev/*)",
       "Edit(.env)",
       "Edit(.env.*)",
       "Edit(**/.env)",

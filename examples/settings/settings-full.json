@@ -154,13 +154,13 @@
   // If your username contains spaces, quote the file path (see last note below).
   //
   //   "hooks": {
-  //     "PreToolUse":   [{"matcher":"*","hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\pre-tool-use.ps1"}]}],
-  //     "PostToolUse":  [{"matcher":"*","hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\post-tool-use.ps1"}]}],
-  //     "Stop":         [{"hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\stop.ps1"}]}],
-  //     "SessionStart": [{"hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File C:\\Users\\you\\.claude\\hooks\\session-start.ps1"}]}]
+  //     "PreToolUse":   [{"matcher":"*","hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\pre-tool-use.ps1\""}]}],
+  //     "PostToolUse":  [{"matcher":"*","hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\post-tool-use.ps1\""}]}],
+  //     "Stop":         [{"hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\stop.ps1\""}]}],
+  //     "SessionStart": [{"hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\session-start.ps1\""}]}]
   //   }
   //
-  // Spaces in path: -File "C:\\Users\\Jane Doe\\.claude\\hooks\\pre-tool-use.ps1"
+  // Spaces in path are handled safely by the quotes above — no extra changes needed.
   // See also: examples/settings/settings-full-windows.json
   "hooks": {},
 
