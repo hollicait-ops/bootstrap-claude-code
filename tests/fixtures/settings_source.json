@@ -1,0 +1,13 @@
+{
+  "model": "claude-opus-4",
+  "theme": "light",
+  "newScalar": "from-source",
+  "permissions": {
+    "allow": ["Bash(git*)", "Bash(npm*)"],
+    "deny": ["Bash(rm -rf /)"],
+    "ask": ["Bash(curl*)"]
+  },
+  "hooks": {
+    "PreToolUse": [{"matcher": "*", "hooks": [{"type": "command", "command": "echo pre"}]}]
+  }
+}

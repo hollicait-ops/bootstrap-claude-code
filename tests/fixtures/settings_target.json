@@ -1,0 +1,12 @@
+{
+  "model": "claude-sonnet-4",
+  "theme": "dark",
+  "permissions": {
+    "allow": ["Bash(git*)"],
+    "deny": [],
+    "ask": ["Bash(git push*)"]
+  },
+  "hooks": {
+    "PostToolUse": [{"hooks": [{"type": "command", "command": "echo post"}]}]
+  }
+}

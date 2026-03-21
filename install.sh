@@ -23,6 +23,10 @@ BLUE='\033[0;34m'
 BOLD='\033[1m'
 RESET='\033[0m'
 
+# Load shared helpers (dry, confirm, detect_pkg_manager, merge_*_json)
+# shellcheck source=lib/helpers.sh
+source "${SCRIPT_DIR}/lib/helpers.sh"
+
 # ─── Flags ───────────────────────────────────────────────────────────────────
 
 DRY_RUN=false
@@ -32,46 +36,14 @@ UNATTENDED=false
 VERIFY_ONLY=false
 
 # ─── Utilities ───────────────────────────────────────────────────────────────
+# dry(), confirm(), detect_pkg_manager(), merge_settings_json(), merge_keybindings_json()
+# are provided by lib/helpers.sh (sourced above).
 
 log()     { echo -e "${BLUE}[info]${RESET}  $*"; }
 ok()      { echo -e "${GREEN}[ok]${RESET}    $*"; }
 warn()    { echo -e "${YELLOW}[warn]${RESET}  $*"; }
 error()   { echo -e "${RED}[error]${RESET} $*" >&2; }
 heading() { echo -e "\n${BOLD}$*${RESET}"; }
-
-# Wrap file operations to respect --dry-run
-dry() {
-  if [[ "$DRY_RUN" == "true" ]]; then
-    echo -e "${YELLOW}[dry-run]${RESET} Would run: $*"
-    return 0
-  fi
-  "$@"
-}
-
-# Prompt user for yes/no (respects --unattended → default yes)
-confirm() {
-  local prompt="${1:-Continue?}"
-  if [[ "$UNATTENDED" == "true" || "$FORCE" == "true" ]]; then
-    return 0
-  fi
-  read -r -p "$(echo -e "${YELLOW}?${RESET} ${prompt} [y/N] ")" reply
-  [[ "$reply" =~ ^[Yy]$ ]]
-}
-
-# Detect package manager for install suggestions
-detect_pkg_manager() {
-  if command -v brew &>/dev/null; then
-    echo "brew"
-  elif command -v apt-get &>/dev/null; then
-    echo "apt"
-  elif command -v dnf &>/dev/null; then
-    echo "dnf"
-  elif command -v pacman &>/dev/null; then
-    echo "pacman"
-  else
-    echo "unknown"
-  fi
-}
 
 # Attempt to install a package via detected package manager
 install_package() {
@@ -348,84 +320,7 @@ setup_dirs() {
 
 # ─── Phase 4: Install Templates ──────────────────────────────────────────────
 
-# Merge two JSON files: target gets values from source added non-destructively
-merge_settings_json() {
-  local source="$1"
-  local target="$2"
-
-  if command -v python3 &>/dev/null; then
-    python3 - "$source" "$target" <<'PYEOF'
-import sys, json
-
-source_path, target_path = sys.argv[1], sys.argv[2]
-
-with open(source_path) as f:
-    source = json.load(f)
-
-with open(target_path) as f:
-    target = json.load(f)
-
-# Merge permissions arrays (union, preserving order, no duplicates)
-for section in ('permissions',):
-    if section in source:
-        if section not in target:
-            target[section] = {}
-        for key in ('allow', 'deny', 'ask'):
-            if key in source[section]:
-                existing = target[section].get(key, [])
-                additions = [r for r in source[section][key] if r not in existing]
-                target[section][key] = existing + additions
-
-# Merge hooks (add event handlers that don't already exist)
-if 'hooks' in source:
-    if 'hooks' not in target:
-        target['hooks'] = {}
-    for event, handlers in source['hooks'].items():
-        if event not in target['hooks']:
-            target['hooks'][event] = handlers
-
-# Copy top-level scalar settings that don't exist in target
-for key, value in source.items():
-    if key not in ('permissions', 'hooks') and key not in target:
-        target[key] = value
-
-print(json.dumps(target, indent=2))
-PYEOF
-  else
-    warn "python3 not found. Copying settings.json wholesale (existing settings overwritten)."
-    cat "$source"
-  fi
-}
-
-# Merge keybindings: only add bindings whose key slot is unused in target
-merge_keybindings_json() {
-  local source="$1"
-  local target="$2"
-
-  if command -v python3 &>/dev/null; then
-    python3 - "$source" "$target" <<'PYEOF'
-import sys, json
-
-source_path, target_path = sys.argv[1], sys.argv[2]
-
-with open(source_path) as f:
-    source = json.load(f)
-
-with open(target_path) as f:
-    target = json.load(f)
-
-existing_keys = {b.get('key') for b in target}
-for binding in source:
-    if binding.get('key') not in existing_keys:
-        target.append(binding)
-
-print(json.dumps(target, indent=2))
-PYEOF
-  else
-    warn "python3 not found. Copying keybindings.json wholesale."
-    cat "$source"
-  fi
-}
+# merge_settings_json() and merge_keybindings_json() provided by lib/helpers.sh
 
 install_settings_json() {
   local src="${TEMPLATES_DIR}/settings.json"
@@ -475,24 +370,7 @@ install_claude_md() {
     if grep -q "$sentinel_begin" "$dst"; then
       # Update existing bootstrap section
       if command -v python3 &>/dev/null; then
-        python3 - "$dst" "$sentinel_begin" "$sentinel_end" "$src" <<'PYEOF'
-import sys, re
-
-dst_path, begin, end, src_path = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
-
-with open(src_path) as f:
-    new_content = f.read().strip()
-
-with open(dst_path) as f:
-    existing = f.read()
-
-pattern = re.escape(begin) + r'.*?' + re.escape(end)
-replacement = f"{begin}\n{new_content}\n{end}"
-updated = re.sub(pattern, replacement, existing, flags=re.DOTALL)
-
-with open(dst_path, 'w') as f:
-    f.write(updated)
-PYEOF
+        python3 "${SCRIPT_DIR}/lib/update_claude_md.py" "$dst" "$sentinel_begin" "$sentinel_end" "$src"
         ok "CLAUDE.md updated (existing bootstrap section replaced)"
       else
         warn "python3 not found — cannot update existing bootstrap section. Remove the sentinel manually and re-run."

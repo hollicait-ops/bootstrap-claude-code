@@ -1,0 +1,5 @@
+[
+  {"key": "ctrl+a", "command": "source-cmd-a", "description": "Source A"},
+  {"key": "ctrl+b", "command": "source-cmd-b", "description": "Source B"},
+  {"key": "ctrl+c", "command": "source-cmd-c", "description": "Source C"}
+]

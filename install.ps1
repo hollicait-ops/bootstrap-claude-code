@@ -25,6 +25,10 @@ $Timestamp           = Get-Date -Format "yyyyMMdd-HHmmss"
 $BackupDir           = Join-Path $ClaudeDir "bootstrapper-backup-$Timestamp"
 $VersionFile         = Join-Path $ClaudeDir ".bootstrapper-version"
 
+# Load shared helpers (Write-Utf8, Set-ObjProp, Invoke-Dry, Confirm-Action,
+#                      Get-WinPkgManager, Merge-SettingsJson, Merge-KeybindingsJson)
+. "$ScriptDir\lib\helpers.ps1"
+
 # ─── Platform Guard ───────────────────────────────────────────────────────────
 # $IsWindows is only defined in PowerShell 6+; PS 5.1 is Windows-only so default true.
 
@@ -35,52 +39,14 @@ if (-not $RunningOnWindows) {
 }
 
 # ─── Logging ──────────────────────────────────────────────────────────────────
+# Write-Utf8, Set-ObjProp, Invoke-Dry, Confirm-Action, Get-WinPkgManager,
+# Merge-SettingsJson, Merge-KeybindingsJson are provided by lib/helpers.ps1 (loaded above).
 
 function Log     ([string]$Msg) { Write-Host "[info]  $Msg" -ForegroundColor Cyan }
 function Ok      ([string]$Msg) { Write-Host "[ok]    $Msg" -ForegroundColor Green }
 function Warn    ([string]$Msg) { Write-Host "[warn]  $Msg" -ForegroundColor Yellow }
 function Err     ([string]$Msg) { Write-Host "[error] $Msg" -ForegroundColor Red }
 function Heading ([string]$Msg) { Write-Host "`n$Msg" -ForegroundColor White }
-
-# Wrap file operations to respect -DryRun
-function Invoke-Dry ([string]$Description, [scriptblock]$Action) {
-    if ($DryRun) {
-        Write-Host "[dry-run] Would: $Description" -ForegroundColor Yellow
-    } else {
-        & $Action
-    }
-}
-
-# Prompt user for yes/no (respects -Unattended / -Force → default yes)
-function Confirm-Action ([string]$Prompt = "Continue?") {
-    if ($Unattended -or $Force) { return $true }
-    $reply = Read-Host "$Prompt [y/N]"
-    return ($reply -match '^[Yy]$')
-}
-
-# Write a string to a file as UTF-8 without BOM (safe for PS 5.1 and PS 7)
-function Write-Utf8 ([string]$Path, [string]$Content) {
-    $enc = New-Object System.Text.UTF8Encoding $false
-    [System.IO.File]::WriteAllText($Path, $Content, $enc)
-}
-
-# Add or overwrite a property on a PSCustomObject
-function Set-ObjProp ($Object, [string]$Name, $Value) {
-    if ($null -ne $Object.PSObject.Properties[$Name]) {
-        $Object.$Name = $Value
-    } else {
-        $Object | Add-Member -MemberType NoteProperty -Name $Name -Value $Value -Force
-    }
-}
-
-# ─── Package Manager Detection ────────────────────────────────────────────────
-
-function Get-WinPkgManager {
-    if (Get-Command winget -ErrorAction SilentlyContinue) { return "winget" }
-    if (Get-Command choco  -ErrorAction SilentlyContinue) { return "choco"  }
-    if (Get-Command scoop  -ErrorAction SilentlyContinue) { return "scoop"  }
-    return "unknown"
-}
 
 # ─── Phase 1: Preflight Checks ────────────────────────────────────────────────
 
@@ -252,59 +218,7 @@ function Invoke-SetupDirs {
 }
 
 # ─── Phase 4: Install Templates ───────────────────────────────────────────────
-
-# Merge two settings.json files: source values added non-destructively to target
-function Merge-SettingsJson ([string]$SourcePath, [string]$TargetPath) {
-    $src = Get-Content $SourcePath -Raw | ConvertFrom-Json
-    $tgt = Get-Content $TargetPath -Raw | ConvertFrom-Json
-
-    # Merge permissions arrays (union, no duplicates)
-    if ($src.permissions) {
-        if (-not $tgt.PSObject.Properties['permissions']) {
-            $tgt | Add-Member -MemberType NoteProperty -Name permissions -Value ([PSCustomObject]@{})
-        }
-        foreach ($key in @('allow', 'deny', 'ask')) {
-            if ($src.permissions.$key) {
-                $existing = if ($tgt.permissions.$key) { @($tgt.permissions.$key) } else { @() }
-                $toAdd    = @($src.permissions.$key) | Where-Object { $_ -notin $existing }
-                Set-ObjProp $tgt.permissions $key ([object[]]($existing + $toAdd))
-            }
-        }
-    }
-
-    # Merge hooks (add event handlers that don't already exist in target)
-    if ($src.hooks) {
-        if (-not $tgt.PSObject.Properties['hooks']) {
-            $tgt | Add-Member -MemberType NoteProperty -Name hooks -Value ([PSCustomObject]@{})
-        }
-        foreach ($prop in $src.hooks.PSObject.Properties) {
-            if (-not $tgt.hooks.PSObject.Properties[$prop.Name]) {
-                $tgt.hooks | Add-Member -MemberType NoteProperty -Name $prop.Name -Value $prop.Value
-            }
-        }
-    }
-
-    # Copy top-level scalar settings not present in target
-    foreach ($prop in $src.PSObject.Properties) {
-        if ($prop.Name -notin @('permissions', 'hooks') -and
-            -not $tgt.PSObject.Properties[$prop.Name]) {
-            $tgt | Add-Member -MemberType NoteProperty -Name $prop.Name -Value $prop.Value
-        }
-    }
-
-    return $tgt | ConvertTo-Json -Depth 10
-}
-
-# Merge keybindings: only add bindings whose key slot is unused in target
-function Merge-KeybindingsJson ([string]$SourcePath, [string]$TargetPath) {
-    $src = @(Get-Content $SourcePath -Raw | ConvertFrom-Json)
-    $tgt = @(Get-Content $TargetPath -Raw | ConvertFrom-Json)
-
-    $existingKeys = $tgt | ForEach-Object { $_.key }
-    $toAdd        = $src | Where-Object { $_.key -notin $existingKeys }
-
-    return ([object[]](@($tgt) + @($toAdd))) | ConvertTo-Json -Depth 5
-}
+# Merge-SettingsJson and Merge-KeybindingsJson are provided by lib/helpers.ps1
 
 function Install-SettingsJson {
     $src = Join-Path $TemplatesDir "settings.json"
