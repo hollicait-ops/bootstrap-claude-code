@@ -19,7 +19,7 @@ setup() {
   chmod +x "${FAKE_HOME}/bin/claude"
 
   # On Windows, python3 may be a broken App Execution Alias.
-  if ! python3 -c "import sys" &>/dev/null 2>&1 && command -v python &>/dev/null; then
+  if ! python3 -c "import sys" &>/dev/null && command -v python &>/dev/null; then
     printf '#!/usr/bin/env bash\nexec python "$@"\n' > "${FAKE_HOME}/bin/python3"
     chmod +x "${FAKE_HOME}/bin/python3"
   fi
