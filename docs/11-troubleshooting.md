@@ -35,6 +35,8 @@ To make the new bash your default shell, add `/usr/local/bin/bash` (or `/opt/hom
 [warn]  python3 not found. Copying settings.json wholesale (existing settings overwritten).
 ```
 
+**Note:** This applies to **Linux and macOS** only. The Windows installer (`install.ps1`) uses PowerShell's built-in JSON handling and does not require python3.
+
 **Cause:** The installer uses `python3` to merge your existing `settings.json` with the template. Without it, it falls back to a full overwrite, losing any customizations you had.
 
 **Fix — install python3:**
@@ -65,13 +67,13 @@ Then re-run `./install.sh --force` to re-merge settings correctly.
 | Exit code | Meaning |
 |-----------|---------|
 | `0` | Allow the tool call to proceed |
-| `2` | Block the tool call; stderr is shown to Claude as an error message (only `PreToolUse` hooks can block) |
+| `2` | Block the tool call; stdout is shown to Claude as the blocking reason (only `PreToolUse` hooks can block) |
 | Any other | Non-blocking error; stderr is shown in verbose mode (`Ctrl+O`) and execution continues |
 
 **Fix:** Check your hook's exit path:
 ```bash
-# Block the call (PreToolUse only)
-echo "Blocked: reason" >&2
+# Block the call (PreToolUse only) — write the reason to stdout
+echo "Blocked: reason"
 exit 2
 
 # Allow the call
@@ -190,9 +192,43 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
 ---
 
+## Bash tool freezes sporadically (Windows)
+
+**Symptom:** A Bash tool call hangs indefinitely. This can happen at any point in a session, not just on the first call, and does not occur every time. Closing the frozen window and asking Claude to retry the command usually succeeds.
+
+**Cause:** A UI race condition in Claude Code on Windows — if the first thing Claude does in a response is open a Bash tool window (with no text output preceding it), the terminal window can freeze. Writing any text before the Bash call prevents it.
+
+**Primary mitigation — add a global instruction to `~/.claude/CLAUDE.md`:**
+
+Create or edit `C:\Users\you\.claude\CLAUDE.md` and add:
+
+```markdown
+## Windows bash freeze workaround
+
+Always output at least one line of text before making any Bash tool call.
+This prevents a UI race condition where the terminal window freezes when bash
+is the first operation in a response.
+```
+
+Claude will follow this instruction in every session.
+
+**Secondary mitigation — pre-warm bash at session start (optional):**
+
+Uncomment the bash pre-warm block in `~/.claude/hooks/session-start.ps1`. This forces an initial MSYS2 DLL load at session start, which can reduce general bash startup latency.
+
+**If freezes persist:**
+- Check whether `.bashrc` or `.bash_profile` contain slow operations (network calls, heavy path scans).
+- Check whether your home directory is on a network drive — Git Bash resolves `~` on startup.
+
+If `~/.claude/hooks/session-start.ps1` does not exist yet, re-run `.\install.ps1` to create it.
+
+---
+
 ## Getting more help
 
-- Run `./install.sh --verify` to check the health of your installation at any time.
-- Run `./install.sh --dry-run` to preview what a re-install would change.
+- **Linux/macOS:** Run `./install.sh --verify` to check the health of your installation at any time.
+- **Linux/macOS:** Run `./install.sh --dry-run` to preview what a re-install would change.
+- **Windows:** Run `.\install.ps1 -Verify` to check the health of your installation at any time.
+- **Windows:** Run `.\install.ps1 -DryRun` to preview what a re-install would change.
 - See [docs/04-hooks.md](04-hooks.md) for the full hook reference including exit code behaviour.
 - See [docs/01-settings.md](01-settings.md) for the full `settings.json` reference.
