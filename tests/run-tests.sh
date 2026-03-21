@@ -83,7 +83,7 @@ header "BATS e2e tests (full install/verify/uninstall lifecycle)"
 if ! command -v bats &>/dev/null; then
   warn "bats not found — skipping e2e tests"
 else
-  if bats "${TESTS_DIR}/e2e/test_lifecycle.bats" 2>&1; then
+  if bats "${TESTS_DIR}/e2e/test_lifecycle.bats"; then
     ok "BATS e2e tests passed"
   else
     err "BATS e2e tests failed"
