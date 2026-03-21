@@ -1,11 +1,12 @@
 # Audit Logger Hook — logs every tool call and result to a file (Windows / PowerShell)
 #
 # Installation:
-#   1. Copy this file to: C:\Users\you\.claude\hooks\audit-logger.ps1
+#   1. Copy this file to: C:\Users\you\.claude\hooks\post-tool-use.ps1
+#      (or merge the relevant logic into your existing post-tool-use.ps1)
 #   2. Register it in ~/.claude/settings.json for PreToolUse and PostToolUse:
 #
-#      "PreToolUse":  [{"matcher":"*","hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\audit-logger.ps1\""}]}]
-#      "PostToolUse": [{"matcher":"*","hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\audit-logger.ps1\""}]}]
+#      "PreToolUse":  [{"matcher":"*","hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\post-tool-use.ps1\""}]}]
+#      "PostToolUse": [{"matcher":"*","hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\post-tool-use.ps1\""}]}]
 #
 # The log file is created at $HOME\.claude\tool-audit.log
 # Each line: UTC timestamp, tool name, and truncated input.

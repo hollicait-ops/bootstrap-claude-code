@@ -127,7 +127,7 @@ python3 -m json.tool ~/.claude/settings.json
 
 This prints the exact line and column of the syntax error.
 
-> **Note:** If your settings file contains `//` comments (JSONC format, as described in [01-settings.md](01-settings.md)), `python3 -m json.tool` will report them as errors even though they are valid. Use a JSONC-aware validator instead — VS Code highlights syntax errors inline, or strip comments first with `sed '/^\s*\/\//d' ~/.claude/settings.json | python3 -m json.tool`.
+> **Note:** If your settings file contains `//` comments (JSONC format, as described in [01-settings.md](01-settings.md)), `python3 -m json.tool` will report them as errors even though they are valid. Use a JSONC-aware validator instead — VS Code highlights syntax errors inline, or strip comments first with `sed '/^\s*\/\//d' ~/.claude/settings.json | python3 -m json.tool`. Note that this `sed` command only removes standalone `//` comment lines; it does not strip inline comments (e.g. `"key": "value" // comment`). If your file uses inline comments, remove them manually before validating.
 
 **Fix:** Correct the syntax error, or restore from the installer's backup:
 ```bash

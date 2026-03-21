@@ -73,9 +73,65 @@
       "Bash(mv*)",
       "Bash(touch*)",
 
+      // Python package managers
+      "Bash(pip install*)",
+      "Bash(pip3 install*)",
+      "Bash(uv*)",
+      "Bash(poetry*)",
+      "Bash(pipenv*)",
+
+      // Ruby
+      "Bash(gem install*)",
+      "Bash(bundle*)",
+
+      // Elixir
+      "Bash(mix*)",
+      "Bash(hex*)",
+
+      // GitHub CLI
+      "Bash(gh issue*)",
+      "Bash(gh pr*)",
+      "Bash(gh repo*)",
+      "Bash(gh run*)",
+      "Bash(gh release*)",
+
+      // Docker (read-only / build)
+      "Bash(docker build*)",
+      "Bash(docker run*)",
+      "Bash(docker ps*)",
+      "Bash(docker images*)",
+      "Bash(docker logs*)",
+      "Bash(docker-compose up*)",
+      "Bash(docker-compose down*)",
+      "Bash(docker-compose build*)",
+
+      // Podman
+      "Bash(podman build*)",
+      "Bash(podman run*)",
+      "Bash(podman ps*)",
+
+      // Kubernetes (read-only)
+      "Bash(kubectl get*)",
+      "Bash(kubectl describe*)",
+      "Bash(kubectl logs*)",
+
+      // Helm (read-only)
+      "Bash(helm list*)",
+      "Bash(helm status*)",
+
+      // Terraform / OpenTofu (read-only)
+      "Bash(terraform init*)",
+      "Bash(terraform plan*)",
+      "Bash(terraform validate*)",
+      "Bash(tofu init*)",
+      "Bash(tofu plan*)",
+      "Bash(tofu validate*)",
+
       // Edit within specific directories (project-level override)
       // "Edit(./src/**)",
       // "Edit(./tests/**)"
+      // Note: "Bash(echo*)" is intentionally omitted — echo with shell redirection
+      // (e.g. echo secret > /tmp/out) can bypass Read/Write deny rules.
     ],
 
     // Commands Claude is never allowed to run, even if the user asks.
@@ -90,6 +146,7 @@
       // Force push and hard reset (destructive git)
       "Bash(git push --force*)",
       "Bash(git push -f*)",
+      "Bash(git push --force-with-lease*)",
       "Bash(git reset --hard*)",
 
       // Privilege escalation
@@ -133,7 +190,34 @@
       "Bash(wget*)",
 
       // Recursive deletes (not covered by deny)
-      "Bash(rm -rf*)"
+      "Bash(rm -rf*)",
+
+      // Container cleanup
+      "Bash(docker rm*)",
+      "Bash(docker rmi*)",
+      "Bash(docker-compose down -v*)",
+      "Bash(podman rm*)",
+
+      // Databases
+      "Bash(psql*)",
+      "Bash(mysql*)",
+      "Bash(mongosh*)",
+      "Bash(redis-cli*)",
+
+      // Kubernetes writes
+      "Bash(kubectl apply*)",
+      "Bash(kubectl delete*)",
+
+      // Helm writes
+      "Bash(helm install*)",
+      "Bash(helm upgrade*)",
+      "Bash(helm uninstall*)",
+
+      // Infrastructure changes
+      "Bash(terraform apply*)",
+      "Bash(terraform destroy*)",
+      "Bash(tofu apply*)",
+      "Bash(tofu destroy*)"
     ]
   },
 
