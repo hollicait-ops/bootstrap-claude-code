@@ -24,21 +24,33 @@ to this index.
 <!-- Claude will add entries here as they are created -->
 <!-- Format: - [entry-name.md](entry-name.md) — one-line description -->
 
-<!--
-EXAMPLES — copy, uncomment, and edit these to get started:
+## Example Entries
 
-(user) Developer role and preferred stack
+These examples show the format. Remove them and replace with your own entries as Claude builds up memory about you and your projects.
+
+### User memories — who you are and how you work
+
 - [user-profile.md](user-profile.md) — Senior full-stack developer; prefers TypeScript + React on the frontend and Python/FastAPI on the backend; values concise code over heavy abstraction.
 
-(feedback) Code style correction
-- [feedback-no-default-exports.md](feedback-no-default-exports.md) — Always use named exports in TypeScript modules.
-  Why: default exports make refactoring and auto-import harder across the codebase.
-  How to apply: replace `export default function Foo` with `export function Foo` in every new or edited file.
+### Feedback memories — corrections and preferences
 
-(project) Current sprint goal
+- [feedback-no-default-exports.md](feedback-no-default-exports.md) — Always use named exports in TypeScript modules.
+  **Why:** default exports make refactoring and auto-import harder across the codebase.
+  **How to apply:** replace `export default function Foo` with `export function Foo` in every new or edited file.
+
+- [feedback-terse-responses.md](feedback-terse-responses.md) — Keep responses short; skip summaries of work already visible in the diff.
+  **Why:** user prefers to read diffs directly rather than prose recaps.
+  **How to apply:** lead with the result or next action, never recap what was just done.
+
+### Project memories — ongoing work and decisions
+
 - [project-auth-overhaul.md](project-auth-overhaul.md) — Sprint 14 goal: migrate session-based auth to JWT + refresh-token flow by 2026-04-01.
-  Motivation: remove the Redis session store dependency and unblock the stateless horizontal-scaling work.
--->
+  **Why:** remove the Redis session store dependency and unblock stateless horizontal-scaling work.
+  **How to apply:** all new auth-related code should use JWT; flag any new Redis session usage for review.
+
+### Reference memories — where to find things
+
+- [reference-linear-board.md](reference-linear-board.md) — Bug tracking: Linear project "BACKEND" at linear.app/org/team/backend. Pipeline bugs go to project "INGEST".
 
 ## Tips
 
