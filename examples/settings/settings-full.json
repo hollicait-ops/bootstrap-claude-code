@@ -154,6 +154,8 @@
       // Echo piped to a shell interpreter can execute arbitrary code
       "Bash(echo* | bash*)",
       "Bash(echo* | sh*)",
+      "Bash(echo* | zsh*)",
+      "Bash(echo* | dash*)",
 
       // Privilege escalation
       "Bash(sudo rm*)",

@@ -103,6 +103,8 @@
       "Bash(git reset --hard*)",
       "Bash(echo* | bash*)",
       "Bash(echo* | sh*)",
+      "Bash(echo* | zsh*)",
+      "Bash(echo* | dash*)",
       "Bash(sudo rm*)",
       "Bash(chmod 777*)",
       "Read(.env)",
