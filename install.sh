@@ -619,7 +619,7 @@ verify() {
     local path="$1"
     local label="${2:-$path}"
     if ! python3 -c "import sys" &>/dev/null 2>&1; then
-      ok "$label (JSON check skipped — python3 not available)"
+      ok "$label (JSON check skipped - python3 not available)"
       return
     fi
     if python3 -m json.tool "$path" &>/dev/null 2>&1; then
