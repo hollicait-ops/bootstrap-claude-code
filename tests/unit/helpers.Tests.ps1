@@ -95,6 +95,16 @@ Describe "Confirm-Action" {
         $Force = $true
         Confirm-Action "Proceed?" | Should -Be $true
     }
+
+    # The interactive N path (user types "N" or presses Enter at the [y/N] prompt)
+    # returns $false. This path is not covered by an automated test because
+    # Confirm-Action uses Read-Host, which reads directly from the PowerShell
+    # console host rather than from stdin — stdin redirection or mocking via
+    # $Input does not work. The behaviour is: any reply that does not match
+    # '^[Yy]$' (including empty string, "n", "N", or any other text) causes
+    # Confirm-Action to return $false.
+    # TODO: If helpers.ps1 is ever refactored to accept a -Reader scriptblock
+    # parameter the N path can be unit-tested without a real interactive session.
 }
 
 # ─── Get-WinPkgManager ───────────────────────────────────────────────────────
