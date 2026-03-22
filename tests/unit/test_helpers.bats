@@ -136,6 +136,18 @@ assert 'Bash(npm*)' in allow
 "
 }
 
+@test "merge_settings_json: source deny entries merged into empty target deny array" {
+  skip_if_no_python3
+  result="$(merge_settings_json "${FIXTURES_DIR}/settings_source.json" \
+                                 "${FIXTURES_DIR}/settings_target.json")"
+  echo "$result" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+deny = d['permissions']['deny']
+assert 'Bash(rm -rf /)' in deny, 'expected deny entry not found: ' + repr(deny)
+"
+}
+
 @test "merge_settings_json: output is valid JSON" {
   skip_if_no_python3
   result="$(merge_settings_json "${FIXTURES_DIR}/settings_source.json" \
