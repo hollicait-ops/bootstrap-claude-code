@@ -182,7 +182,7 @@ check_claude_cli() {
 }
 
 check_python3() {
-  if command -v python3 &>/dev/null; then
+  if python3 -c "import sys" &>/dev/null 2>&1; then
     ok "python3 found: $(command -v python3)"
     return 0
   fi
@@ -342,8 +342,14 @@ install_settings_json() {
     else
       echo "$merged" > "$dst"
     fi
+  elif [[ "$DRY_RUN" == "true" ]]; then
+    echo "[dry-run] Would install settings.json to $dst"
   else
-    dry cp "$src" "$dst"
+    local empty_json
+    empty_json="$(mktemp)"
+    echo '{}' > "$empty_json"
+    merge_settings_json "$src" "$empty_json" > "$dst"
+    rm -f "$empty_json"
   fi
   ok "settings.json installed"
 }
@@ -415,8 +421,14 @@ install_keybindings() {
     else
       echo "$merged" > "$dst"
     fi
+  elif [[ "$DRY_RUN" == "true" ]]; then
+    echo "[dry-run] Would install keybindings.json to $dst"
   else
-    dry cp "$src" "$dst"
+    local empty_json
+    empty_json="$(mktemp)"
+    echo '[]' > "$empty_json"
+    merge_keybindings_json "$src" "$empty_json" > "$dst"
+    rm -f "$empty_json"
   fi
   ok "keybindings.json installed"
 }
@@ -482,8 +494,31 @@ import sys, json, os
 
 settings_path, hooks_dir = sys.argv[1], sys.argv[2]
 
+def strip_jsonc_comments(text):
+    result, i, in_string = [], 0, False
+    while i < len(text):
+        if in_string:
+            if text[i] == '\\' and i + 1 < len(text):
+                result.append(text[i]); result.append(text[i+1]); i += 2
+            elif text[i] == '"':
+                result.append(text[i]); in_string = False; i += 1
+            else:
+                result.append(text[i]); i += 1
+        else:
+            if text[i] == '"':
+                result.append(text[i]); in_string = True; i += 1
+            elif text[i:i+2] == '//':
+                while i < len(text) and text[i] != '\n': i += 1
+            elif text[i:i+2] == '/*':
+                i += 2
+                while i < len(text) and text[i:i+2] != '*/': i += 1
+                i += 2
+            else:
+                result.append(text[i]); i += 1
+    return ''.join(result)
+
 with open(settings_path) as f:
-    settings = json.load(f)
+    settings = json.loads(strip_jsonc_comments(f.read()))
 
 if 'hooks' not in settings:
     settings['hooks'] = {}
@@ -583,6 +618,10 @@ verify() {
   assert_valid_json() {
     local path="$1"
     local label="${2:-$path}"
+    if ! python3 -c "import sys" &>/dev/null 2>&1; then
+      ok "$label (JSON check skipped — python3 not available)"
+      return
+    fi
     if python3 -m json.tool "$path" &>/dev/null 2>&1; then
       ok "$label (valid JSON)"
     else

@@ -192,7 +192,7 @@ assert 'ctrl+c' in keys
 # ─── Helpers ─────────────────────────────────────────────────────────────────
 
 skip_if_no_python3() {
-  if ! command -v python3 &>/dev/null; then
+  if ! python3 -c "import sys" &>/dev/null 2>&1; then
     skip "python3 not available"
   fi
 }

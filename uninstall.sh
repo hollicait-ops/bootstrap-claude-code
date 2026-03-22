@@ -117,6 +117,9 @@ if [[ -n "$RESTORE_BACKUP" ]]; then
       dry cp "$backed_up" "$dst"
       ok "Restored: ~/.claude/${name}"
     elif [[ -d "$backed_up" ]]; then
+      if [[ -d "${CLAUDE_DIR}/${name}" && "$DRY_RUN" != "true" ]]; then
+        rm -rf "${CLAUDE_DIR}/${name}"
+      fi
       dry cp -r "$backed_up" "${CLAUDE_DIR}/${name}"
       ok "Restored: ~/.claude/${name}/"
     fi
