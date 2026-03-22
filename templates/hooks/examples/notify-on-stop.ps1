@@ -23,6 +23,8 @@
 #
 # NOTE: Start-Sleep is required here. Without it the script exits before the
 # balloon tip has time to display, because the hook process terminates immediately.
+# WARNING: This sleep blocks Claude Code's next action for ~3.5 s — acceptable
+# for a notification hook, but avoid longer sleeps in hooks that run frequently.
 #
 # Uncomment the block below to enable Method B:
 #
@@ -31,6 +33,7 @@
 # $notify.Icon    = [System.Drawing.SystemIcons]::Information
 # $notify.Visible = $true
 # $notify.ShowBalloonTip(3000, "Claude Code", "Claude has finished.", [System.Windows.Forms.ToolTipIcon]::Info)
+# # WARNING: This sleep blocks Claude Code's next action for ~3.5 s — required for the balloon tip to display.
 # Start-Sleep -Milliseconds 3500
 # $notify.Dispose()
 

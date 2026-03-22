@@ -13,7 +13,7 @@
 
 $LogFile   = Join-Path $HOME ".claude\tool-audit.log"
 $ToolName  = $env:CLAUDE_TOOL_NAME
-$ToolInput = $env:CLAUDE_TOOL_INPUT
+$ToolInput = $env:CLAUDE_TOOL_INPUT  # JSON-encoded input arguments for the tool call that triggered this hook
 
 $stamp = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
 

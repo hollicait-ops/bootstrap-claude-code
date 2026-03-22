@@ -10,7 +10,7 @@
 #        pwsh -NonInteractive -ExecutionPolicy Bypass -File "C:\Users\you\.claude\hooks\post-tool-use.ps1"
 
 $ToolName  = $env:CLAUDE_TOOL_NAME
-$ToolInput = $env:CLAUDE_TOOL_INPUT
+$ToolInput = $env:CLAUDE_TOOL_INPUT  # JSON-encoded input arguments for the tool call that triggered this hook
 $LogFile   = Join-Path $HOME ".claude\tool-audit.log"
 $Timestamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
 
