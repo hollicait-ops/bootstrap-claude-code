@@ -130,8 +130,9 @@
       // Edit within specific directories (project-level override)
       // "Edit(./src/**)",
       // "Edit(./tests/**)"
-      // Note: "Bash(echo*)" is intentionally omitted — echo with shell redirection
-      // (e.g. echo secret > /tmp/out) can bypass Read/Write deny rules.
+
+      // Echo is safe for routine output; pipe-to-shell patterns are blocked in deny below.
+      "Bash(echo*)"
     ],
 
     // Commands Claude is never allowed to run, even if the user asks.
@@ -144,10 +145,15 @@
       "Bash(rm -rf /home*)",
 
       // Force push and hard reset (destructive git)
+      // Note: --force-with-lease is moved to ask — it is safer than bare --force
+      // (only pushes if no one else has pushed since your last fetch).
       "Bash(git push --force*)",
       "Bash(git push -f*)",
-      "Bash(git push --force-with-lease*)",
       "Bash(git reset --hard*)",
+
+      // Echo piped to a shell interpreter can execute arbitrary code
+      "Bash(echo* | bash*)",
+      "Bash(echo* | sh*)",
 
       // Privilege escalation
       "Bash(sudo rm*)",
@@ -181,6 +187,9 @@
     "ask": [
       // Network pushes
       "Bash(git push*)",
+      // --force-with-lease is safer than bare --force: it refuses to push if the
+      // remote has commits you haven't fetched. Requiring confirmation is enough.
+      "Bash(git push --force-with-lease*)",
       "Bash(npm publish*)",
       "Bash(yarn publish*)",
       "Bash(pnpm publish*)",

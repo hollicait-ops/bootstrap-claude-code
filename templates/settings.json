@@ -81,7 +81,8 @@
       "Bash(mkdir -p*)",
       "Bash(cp*)",
       "Bash(mv*)",
-      "Bash(touch*)"
+      "Bash(touch*)",
+      "Bash(echo*)"
     ],
     "deny": [
       "Bash(rm -rf /)",
@@ -90,8 +91,9 @@
       "Bash(rm -rf /home*)",
       "Bash(git push --force*)",
       "Bash(git push -f*)",
-      "Bash(git push --force-with-lease*)",
       "Bash(git reset --hard*)",
+      "Bash(echo* | bash*)",
+      "Bash(echo* | sh*)",
       "Bash(chmod 777*)",
       "Bash(sudo rm*)",
       "Read(.env)",
@@ -116,6 +118,7 @@
     ],
     "ask": [
       "Bash(git push*)",
+      "Bash(git push --force-with-lease*)",
       "Bash(npm publish*)",
       "Bash(yarn publish*)",
       "Bash(pnpm publish*)",
