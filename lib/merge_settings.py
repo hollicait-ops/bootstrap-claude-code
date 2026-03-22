@@ -10,6 +10,43 @@ import sys
 import json
 
 
+def strip_jsonc_comments(text: str) -> str:
+    """Strip // line comments and /* */ block comments, respecting strings."""
+    result = []
+    i = 0
+    in_string = False
+    while i < len(text):
+        if in_string:
+            if text[i] == '\\' and i + 1 < len(text):
+                result.append(text[i])
+                result.append(text[i + 1])
+                i += 2
+            elif text[i] == '"':
+                result.append(text[i])
+                in_string = False
+                i += 1
+            else:
+                result.append(text[i])
+                i += 1
+        else:
+            if text[i] == '"':
+                result.append(text[i])
+                in_string = True
+                i += 1
+            elif text[i:i + 2] == '//':
+                while i < len(text) and text[i] != '\n':
+                    i += 1
+            elif text[i:i + 2] == '/*':
+                i += 2
+                while i < len(text) and text[i:i + 2] != '*/':
+                    i += 1
+                i += 2
+            else:
+                result.append(text[i])
+                i += 1
+    return ''.join(result)
+
+
 def merge_settings(source: dict, target: dict) -> dict:
     """Return a new dict with source merged non-destructively into target."""
     result = dict(target)
@@ -47,7 +84,7 @@ def merge_settings(source: dict, target: dict) -> dict:
 if __name__ == "__main__":
     source_path, target_path = sys.argv[1], sys.argv[2]
     with open(source_path) as f:
-        source = json.load(f)
+        source = json.loads(strip_jsonc_comments(f.read()))
     with open(target_path) as f:
-        target = json.load(f)
+        target = json.loads(strip_jsonc_comments(f.read()))
     print(json.dumps(merge_settings(source, target), indent=2))

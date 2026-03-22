@@ -87,10 +87,12 @@ if [[ "$RUN_UNIT" == "true" ]]; then
     warn "  npm install -g bats"
     warn "Skipping BATS tests"
   else
-    if bats "${TESTS_DIR}/unit/test_helpers.bats" 2>&1; then
-      ok "BATS unit tests passed"
-    else
+    bats_out=$(bats --tap "${TESTS_DIR}/unit/test_helpers.bats" 2>&1 || true)
+    echo "$bats_out"
+    if echo "$bats_out" | grep -q "^not ok"; then
       err "BATS unit tests failed"
+    else
+      ok "BATS unit tests passed"
     fi
   fi
 fi
@@ -103,10 +105,12 @@ if [[ "$RUN_INTEGRATION" == "true" ]]; then
   if ! command -v bats &>/dev/null; then
     warn "bats not found — skipping integration tests"
   else
-    if bats "${TESTS_DIR}/integration/test_install.bats" 2>&1; then
-      ok "BATS integration tests passed"
-    else
+    bats_out=$(bats --tap "${TESTS_DIR}/integration/test_install.bats" 2>&1 || true)
+    echo "$bats_out"
+    if echo "$bats_out" | grep -q "^not ok"; then
       err "BATS integration tests failed"
+    else
+      ok "BATS integration tests passed"
     fi
   fi
 fi
@@ -119,10 +123,12 @@ if [[ "$RUN_INTEGRATION" == "true" ]]; then
   if ! command -v bats &>/dev/null; then
     warn "bats not found — skipping e2e tests"
   else
-    if bats "${TESTS_DIR}/e2e/test_lifecycle.bats"; then
-      ok "BATS e2e tests passed"
-    else
+    bats_out=$(bats --tap "${TESTS_DIR}/e2e/test_lifecycle.bats" 2>&1 || true)
+    echo "$bats_out"
+    if echo "$bats_out" | grep -q "^not ok"; then
       err "BATS e2e tests failed"
+    else
+      ok "BATS e2e tests passed"
     fi
   fi
 fi
