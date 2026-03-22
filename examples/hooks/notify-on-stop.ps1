@@ -28,6 +28,7 @@ try {
     $notify.Icon    = [System.Drawing.SystemIcons]::Information
     $notify.Visible = $true
     $notify.ShowBalloonTip(3000, $Title, $Message, [System.Windows.Forms.ToolTipIcon]::Info)
+    # WARNING: This sleep blocks Claude Code's next action for ~3.5 s — required for the balloon tip to display.
     Start-Sleep -Milliseconds 3500
     $notify.Dispose()
 } catch {

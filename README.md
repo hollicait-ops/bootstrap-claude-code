@@ -175,7 +175,7 @@ The `docs/` directory contains a complete reference for every Claude Code featur
 
 The `examples/` directory has concrete configurations for common scenarios:
 
-- [examples/settings/](examples/settings/) — Minimal, strict, and fully-documented settings
+- [examples/settings/](examples/settings/) — Minimal, strict, and fully-documented settings; see also [settings-full-windows.json](examples/settings/settings-full-windows.json) for Windows
 - [examples/hooks/](examples/hooks/) — Audit logger, notifications, safety guards
 - [examples/mcp/](examples/mcp/) — Filesystem, GitHub, and web search MCP configs
 - [examples/claude-md/](examples/claude-md/) — CLAUDE.md templates for Python, Next.js, and personal use

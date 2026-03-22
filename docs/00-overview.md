@@ -68,6 +68,16 @@ claude
 4. Four custom slash commands are ready: `/commit`, `/review-pr`, `/security-check`, `/daily-standup`
 5. Hook scripts are installed but do nothing by default — opt in by editing them
 
+## Examples
+
+The `examples/` directory has ready-to-use configurations:
+
+- [examples/settings/settings-full.json](../examples/settings/settings-full.json) — Fully annotated settings for macOS/Linux
+- [examples/settings/settings-full-windows.json](../examples/settings/settings-full-windows.json) — Fully annotated settings for Windows (PowerShell hook paths, Windows-specific entries)
+- [examples/hooks/](../examples/hooks/) — Audit logger, desktop notifications, safety guards
+- [examples/mcp/](../examples/mcp/) — Filesystem, GitHub, and web search MCP configs
+- [examples/claude-md/](../examples/claude-md/) — CLAUDE.md templates for Python, Next.js, and personal use
+
 ## Customization
 
 Every file installed by this bootstrapper is meant to be edited. Start with:
