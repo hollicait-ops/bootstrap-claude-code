@@ -51,6 +51,7 @@ merge_settings_json() {
   if command -v python3 &>/dev/null; then
     python3 "${_PROJECT_DIR}/lib/merge_settings.py" "$source" "$target"
   else
+    echo "[warn] python3 not found — copying source settings wholesale; existing settings will be overwritten." >&2
     cat "$source"
   fi
 }
@@ -64,6 +65,7 @@ merge_keybindings_json() {
   if command -v python3 &>/dev/null; then
     python3 "${_PROJECT_DIR}/lib/merge_keybindings.py" "$source" "$target"
   else
+    echo "[warn] python3 not found — copying source keybindings wholesale; existing keybindings will be overwritten." >&2
     cat "$source"
   fi
 }
