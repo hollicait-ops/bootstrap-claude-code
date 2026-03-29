@@ -648,6 +648,55 @@ verify() {
   if command -v python3 &>/dev/null; then
     assert_valid_json "${CLAUDE_DIR}/settings.json"    "~/.claude/settings.json"
     assert_valid_json "${CLAUDE_DIR}/keybindings.json" "~/.claude/keybindings.json"
+
+    # Verify hook file paths registered in settings.json actually exist on disk
+    local hook_paths
+    hook_paths="$(python3 - "${CLAUDE_DIR}/settings.json" 2>/dev/null <<'PYEOF'
+import sys, json
+
+def strip_jsonc_comments(text):
+    result, i, in_string = [], 0, False
+    while i < len(text):
+        if in_string:
+            if text[i] == '\\' and i + 1 < len(text):
+                result.append(text[i]); result.append(text[i+1]); i += 2
+            elif text[i] == '"':
+                result.append(text[i]); in_string = False; i += 1
+            else:
+                result.append(text[i]); i += 1
+        else:
+            if text[i] == '"':
+                result.append(text[i]); in_string = True; i += 1
+            elif text[i:i+2] == '//':
+                while i < len(text) and text[i] != '\n': i += 1
+            elif text[i:i+2] == '/*':
+                i += 2
+                while i < len(text) and text[i:i+2] != '*/': i += 1
+                i += 2
+            else:
+                result.append(text[i]); i += 1
+    return ''.join(result)
+
+try:
+    with open(sys.argv[1]) as f:
+        s = json.loads(strip_jsonc_comments(f.read()))
+    for hooks_list in s.get('hooks', {}).values():
+        for entry in hooks_list:
+            for h in entry.get('hooks', []):
+                if h.get('type') == 'command':
+                    path = h.get('command', '').split()[0]
+                    if path and (path.startswith('/') or path.startswith('~')):
+                        print(path)
+except Exception:
+    pass
+PYEOF
+)"
+    if [[ -n "$hook_paths" ]]; then
+      while IFS= read -r hook_path; do
+        expanded="${hook_path/#\~/$HOME}"
+        assert_exists "$expanded" "Hook registered in settings.json: $hook_path"
+      done <<< "$hook_paths"
+    fi
   fi
 
   if [[ "$all_ok" == "true" ]]; then
