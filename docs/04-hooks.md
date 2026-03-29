@@ -14,6 +14,14 @@ for safety guards, audit logging, notifications, and automation.
 | `SessionStart` | When a session begins | No |
 | `SessionEnd` | When a session ends | No |
 | `PostCompact` | After context compaction | No |
+| `StopFailure` | On API errors (rate limits, auth failures) | No |
+| `CwdChanged` | When the working directory changes | No |
+| `FileChanged` | When a watched file changes on disk | No |
+| `TaskCreated` | When a task is created via the TaskCreate tool | No |
+| `WorktreeCreate` | Before a git worktree is created (can override behavior) | No |
+| `WorktreeRemove` | When a git worktree is removed | No |
+| `SubagentStart` | When a subagent process starts | No |
+| `SubagentStop` | When a subagent process stops | No |
 
 ## Exit Codes
 
@@ -70,6 +78,43 @@ but here's the manual format:
 ```
 
 The `matcher` field (for PreToolUse/PostToolUse) is a tool name or `"*"` for all.
+
+### Hook Options
+
+**`async: true`** — Run the hook in the background without blocking Claude:
+
+```json
+{
+  "type": "command",
+  "command": "/path/to/hook.sh",
+  "async": true
+}
+```
+
+Use this for notifications or logging where you don't need the result before
+Claude continues.
+
+**`if` field** — Conditionally fire the hook using permission rule syntax:
+
+```json
+{
+  "matcher": "Bash",
+  "if": "Bash(git *)",
+  "hooks": [{"type": "command", "command": "/path/to/hook.sh"}]
+}
+```
+
+The hook only runs when the tool call matches the `if` pattern. Useful for
+narrowing a broad `"*"` matcher to specific commands.
+
+### Hook Types
+
+| Type | Description |
+|------|-------------|
+| `command` | Run a shell command |
+| `prompt` | Evaluate a condition with an LLM (PreToolUse/PostToolUse only) |
+| `agent` | Spawn a subagent for complex validation (PreToolUse/PostToolUse only) |
+| `http` | POST the hook input JSON to a URL |
 
 ## Hook Script Template
 
