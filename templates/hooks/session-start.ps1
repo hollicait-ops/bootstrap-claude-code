@@ -1,7 +1,12 @@
 # SessionStart Hook — runs when a new Claude Code session begins (Windows / PowerShell)
 #
 # Use for: environment checks, welcome messages, context loading, reminders.
-# All behaviors below are commented out — opt in by uncommenting.
+#
+# This hook has NO active code by default — it does nothing until you opt in.
+#
+# =============================================================================
+# OPTIONAL — uncomment any section below to enable it
+# =============================================================================
 
 # ── Optional: pre-warm bash to prevent first-use freeze on Windows ────────────
 # On Windows, the first bash process spawn (Git Bash / MSYS2) can freeze while

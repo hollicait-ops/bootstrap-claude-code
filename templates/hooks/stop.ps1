@@ -1,7 +1,12 @@
 # Stop Hook — runs when Claude finishes generating a response (Windows / PowerShell)
 #
 # Use for: completion notifications, session logging, cleanup.
-# All behaviors below are commented out — opt in by uncommenting.
+#
+# This hook has NO active code by default — it does nothing until you opt in.
+#
+# =============================================================================
+# OPTIONAL — uncomment any section below to enable it
+# =============================================================================
 
 # ── Optional: Windows balloon tip notification (via System.Windows.Forms) ─────
 # NOTE: The Start-Sleep below is required — without it, the script exits before

@@ -8,7 +8,11 @@
 #
 # Exit code is ignored by Claude Code for PostToolUse hooks.
 #
-# All behaviors below are commented out — opt in by uncommenting.
+# This hook has NO active code by default — it does nothing until you opt in.
+#
+# =============================================================================
+# OPTIONAL — uncomment any section below to enable it
+# =============================================================================
 
 TOOL_NAME="${CLAUDE_TOOL_NAME:-}"
 # TOOL_INPUT="${CLAUDE_TOOL_INPUT:-}"

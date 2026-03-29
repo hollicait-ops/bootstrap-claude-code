@@ -15,6 +15,10 @@
 $ToolName  = $env:CLAUDE_TOOL_NAME
 $ToolInput = $env:CLAUDE_TOOL_INPUT
 
+# =============================================================================
+# ACTIVE — this code runs automatically on every tool call
+# =============================================================================
+
 # ── Safety guard: block catastrophically destructive commands ─────────────────
 if ($ToolName -eq 'Bash') {
     $cmd = ''
@@ -36,6 +40,10 @@ if ($ToolName -eq 'Bash') {
         exit 2
     }
 }
+
+# =============================================================================
+# OPTIONAL — uncomment any section below to enable it
+# =============================================================================
 
 # ── Optional: pre-warm bash before each Bash tool call (Windows) ─────────────
 # Spawns a throwaway bash process before the actual tool call. If bash stalls
