@@ -179,6 +179,30 @@ an MCP server:
 - Community registry: https://mcp.so
 - npm: search `@modelcontextprotocol/server-*`
 
+## MCP Elicitation
+
+Some MCP servers can pause mid-task and ask you for input — credentials, a
+choice between options, a URL to open in your browser, or any other structured
+data the server needs to continue.
+
+When elicitation occurs:
+1. An interactive dialog appears with the server's request
+2. The current task is paused until you respond
+3. Your input is sent back to the server and the task resumes
+
+**Example:** A database MCP server might elicit your password on first
+connection rather than requiring it in settings. A GitHub server might request
+OAuth authorization the first time it needs to write to a repo.
+
+For hook authors, two events are available:
+
+| Event | When |
+|-------|------|
+| `Elicitation` | When the MCP server sends an elicitation request |
+| `ElicitationResult` | When the user submits their response |
+
+These can be used for logging or to pre-fill responses automatically.
+
 ## Troubleshooting
 
 **Server not connecting**
