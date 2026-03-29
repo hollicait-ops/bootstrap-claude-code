@@ -498,14 +498,33 @@ function Write-VersionMarker {
 
 function Write-NextSteps {
     Write-Host ""
-    Write-Host "Next steps:" -ForegroundColor White
-    Write-Host "  1. Open Claude Code:          claude"
-    Write-Host "  2. Read the user guide:       $ScriptDir\docs\00-overview.md"
-    Write-Host "  3. Customize your CLAUDE.md:  $ClaudeDir\CLAUDE.md"
-    Write-Host "  4. Review permissions:        $ClaudeDir\settings.json"
-    if (Test-Path $BackupDir -PathType Container) {
-        Write-Host "  5. Previous configs backed up: $BackupDir"
+    Write-Host "====================================================" -ForegroundColor Cyan
+    Write-Host "  Bootstrap complete! Here is what was installed:" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  Slash commands (type these in Claude Code):" -ForegroundColor White
+    Write-Host "    /commit          - Stage, review, and commit with a structured message"
+    Write-Host "    /review-pr       - Review an open pull request"
+    Write-Host "    /security-check  - Scan the codebase for security issues"
+    Write-Host "    /daily-standup   - Summarize recent work for a standup"
+    Write-Host "    /fix-bug         - Root-cause and fix a bug"
+    if (-not $Minimal) {
+        Write-Host ""
+        Write-Host "  Hooks installed ($ClaudeDir\hooks\):" -ForegroundColor White
+        Write-Host "    pre-tool-use   - Blocks dangerous rm -rf commands  [ACTIVE]"
+        Write-Host "    post-tool-use  - Automation examples               [edit to enable]"
+        Write-Host "    session-start  - Session setup examples            [edit to enable]"
+        Write-Host "    stop           - Notification examples             [edit to enable]"
     }
+    Write-Host ""
+    Write-Host "  Next steps:" -ForegroundColor White
+    Write-Host "    1. Open Claude Code:          claude"
+    Write-Host "    2. Read the user guide:       $ScriptDir\docs\00-overview.md"
+    Write-Host "    3. Customize your CLAUDE.md:  $ClaudeDir\CLAUDE.md"
+    Write-Host "    4. Review permissions:        $ClaudeDir\settings.json"
+    if (Test-Path $BackupDir -PathType Container) {
+        Write-Host "    5. Previous configs backed up: $BackupDir"
+    }
+    Write-Host "====================================================" -ForegroundColor Cyan
     Write-Host ""
 }
 
