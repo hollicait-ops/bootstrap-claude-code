@@ -88,7 +88,7 @@ Two steps are needed -- one to enable the native PowerShell tool, one to make Cl
 ```markdown
 ## PowerShell syntax
 
-Use PowerShell-native syntax in all Bash tool calls. This means:
+Use PowerShell-native syntax when executing shell commands. This means:
 - Use `$null` instead of `/dev/null`
 - Use backslashes in Windows paths (e.g. `C:\Users\...`)
 - Use PowerShell cmdlets (Get-ChildItem, Get-Content, Select-String, etc.)
