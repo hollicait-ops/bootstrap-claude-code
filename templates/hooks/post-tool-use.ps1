@@ -1,35 +1,35 @@
-# PostToolUse Hook — runs after every tool call (Windows / PowerShell)
+# PostToolUse Hook -- runs after every tool call (Windows / PowerShell)
 #
 # Environment variables available:
-#   CLAUDE_TOOL_NAME    — name of the tool that ran
-#   CLAUDE_TOOL_INPUT   — JSON-encoded tool input
-#   CLAUDE_TOOL_RESULT  — JSON-encoded tool result
+#   CLAUDE_TOOL_NAME    -- name of the tool that ran
+#   CLAUDE_TOOL_INPUT   -- JSON-encoded tool input
+#   CLAUDE_TOOL_RESULT  -- JSON-encoded tool result
 #
 # Exit code is ignored by Claude Code for PostToolUse hooks.
 #
-# This hook has NO active code by default — it does nothing until you opt in.
+# This hook has NO active code by default -- it does nothing until you opt in.
 #
 # =============================================================================
-# OPTIONAL — uncomment any section below to enable it
+# OPTIONAL -- uncomment any section below to enable it
 # =============================================================================
 
 $ToolName = $env:CLAUDE_TOOL_NAME
 # $ToolInput  = $env:CLAUDE_TOOL_INPUT
 # $ToolResult = $env:CLAUDE_TOOL_RESULT
 
-# ── Optional: append every tool call to an audit log ─────────────────────────
+# -- Optional: append every tool call to an audit log -------------------------
 # $LogFile = Join-Path $HOME ".claude\tool-audit.log"
 # $stamp   = (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ')
 # Add-Content -Path $LogFile -Value "$stamp POST TOOL=$ToolName"
 
-# ── Optional: run tests automatically after any file edit ────────────────────
+# -- Optional: run tests automatically after any file edit --------------------
 # if ($ToolName -in @('Edit', 'Write')) {
 #     if (Test-Path 'package.json') {
 #         npm test --silent 2>$null
 #     }
 # }
 
-# ── Optional: auto-format after edits (e.g., prettier) ───────────────────────
+# -- Optional: auto-format after edits (e.g., prettier) -----------------------
 # if ($ToolName -eq 'Edit') {
 #     try {
 #         $inputData = $env:CLAUDE_TOOL_INPUT | ConvertFrom-Json

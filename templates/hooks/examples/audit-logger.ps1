@@ -1,4 +1,4 @@
-# Audit Logger Hook — logs every tool call and result to a file (Windows / PowerShell)
+# Audit Logger Hook -- logs every tool call and result to a file (Windows / PowerShell)
 #
 # Installation:
 #   1. Copy this file to: C:\Users\you\.claude\hooks\post-tool-use.ps1

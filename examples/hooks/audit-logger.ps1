@@ -1,4 +1,4 @@
-# Example: Audit Logger (PostToolUse) — Windows / PowerShell
+# Example: Audit Logger (PostToolUse) -- Windows / PowerShell
 #
 # Logs every tool call to ~/.claude/tool-audit.log with timestamp, tool name,
 # and (for Bash tools) the command that was run.
