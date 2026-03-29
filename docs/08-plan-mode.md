@@ -103,3 +103,28 @@ can catch misunderstandings before they become code changes.
 
 **Push back on the plan.** If the plan proposes something you don't like, say why.
 Claude will revise. It's much easier to change a plan than to revert code.
+
+## Checkpointing
+
+Claude Code automatically saves a checkpoint before each file change. This
+means you can always undo to a known-good state, even mid-implementation.
+
+**Restore a checkpoint:**
+```
+/rewind
+```
+
+Or press **Esc+Esc** to open the restore dialog.
+
+You'll be asked what to restore:
+
+| Option | What it does |
+|--------|-------------|
+| **Code only** | Reverts file changes; keeps the conversation history intact |
+| **Code + conversation** | Fully rewinds both files and conversation to that point |
+
+"Code only" is useful when Claude went down the wrong path but the conversation
+context is still valuable. "Code + conversation" is a full reset.
+
+Checkpointing is automatic — there's nothing to configure. It works in plan
+mode and normal mode alike.
