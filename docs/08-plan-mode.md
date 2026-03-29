@@ -120,11 +120,12 @@ You'll be asked what to restore:
 
 | Option | What it does |
 |--------|-------------|
-| **Code only** | Reverts file changes; keeps the conversation history intact |
-| **Code + conversation** | Fully rewinds both files and conversation to that point |
+| **Code only** | Reverts file changes to the checkpoint state; conversation history is kept intact so you can redirect Claude without losing context |
+| **Code + conversation** | Fully rewinds both files and the conversation to that exact point — a complete reset |
 
-"Code only" is useful when Claude went down the wrong path but the conversation
-context is still valuable. "Code + conversation" is a full reset.
+"Code only" is useful when Claude went down the wrong implementation path but
+you still want the conversation context. "Code + conversation" is a clean slate
+from that point.
 
-Checkpointing is automatic — there's nothing to configure. It works in plan
-mode and normal mode alike.
+Esc+Esc works anywhere in the session — not just in plan mode. Checkpointing is
+automatic; there's nothing to configure.
