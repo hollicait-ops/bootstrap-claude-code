@@ -37,6 +37,10 @@ Your prompt here...
 | `description` | Yes | Shown in `/help` output |
 | `allowed-tools` | No | Comma-separated list of tools allowed. Defaults to all. |
 | `model` | No | Override the model for this command |
+| `effort` | No | Override effort level: `low`, `medium`, or `high` |
+| `maxTurns` | No | Limit the number of agent turns this command can take |
+| `disallowedTools` | No | Tools explicitly blocked for this command |
+| `initialPrompt` | No | Auto-submitted first turn when the agent starts |
 
 ## Arguments
 
@@ -70,6 +74,20 @@ Claude Code includes several built-in slash commands:
 | `/plan` | Enter plan mode |
 | `/mcp` | Manage MCP servers |
 | `/status` | Show session status |
+| `/effort [low\|medium\|high]` | Set model effort/thinking level for the session |
+| `/voice` | Activate voice push-to-talk mode |
+| `/loop [interval] [prompt]` | Repeat a prompt on a recurring interval (e.g. `/loop 5m check build`) |
+| `/schedule` | Create a cloud scheduled task that runs when machine is off |
+| `/branch` | Branch the current conversation (replaces `/fork`) |
+| `/btw [question]` | Ask a side question without interrupting the current agent |
+| `/copy [N]` | Copy the Nth-latest assistant response to clipboard |
+| `/rewind` | Restore to a checkpoint — code only, or code and conversation |
+| `/teleport` | Pull a web or cloud session into the local terminal |
+| `/desktop` | Hand off the terminal session to the Desktop app |
+| `/doctor` | Run environment diagnostics |
+| `/plugin` | Manage plugins (install, marketplace, toggle) |
+| `/fast` | Toggle fast mode |
+| `/keybindings` | Open or edit `~/.claude/keybindings.json` |
 
 ## Bootstrapper Commands
 
