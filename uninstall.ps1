@@ -1,5 +1,5 @@
 #Requires -Version 5.1
-# uninstall.ps1 — Claude Code Bootstrapper Removal (Windows)
+# uninstall.ps1 -- Claude Code Bootstrapper Removal (Windows)
 #
 # Removes all files installed by install.ps1 and optionally restores a backup.
 # Usage: .\uninstall.ps1 [-RestoreBackup <path>] [-DryRun]
@@ -16,7 +16,7 @@ $ErrorActionPreference = 'Stop'
 $ClaudeDir   = Join-Path $HOME ".claude"
 $VersionFile = Join-Path $ClaudeDir ".bootstrapper-version"
 
-# ─── Logging ──────────────────────────────────────────────────────────────────
+# --- Logging ------------------------------------------------------------------
 
 function Log     ([string]$Msg) { Write-Host "[info]  $Msg" -ForegroundColor Cyan }
 function Ok      ([string]$Msg) { Write-Host "[ok]    $Msg" -ForegroundColor Green }
@@ -38,13 +38,13 @@ function Write-Utf8 ([string]$Path, [string]$Content) {
     [System.IO.File]::WriteAllText($Path, $Content, $enc)
 }
 
-# ─── Header ───────────────────────────────────────────────────────────────────
+# --- Header -------------------------------------------------------------------
 
-Write-Host "Claude Code Bootstrapper — Uninstall (Windows)" -ForegroundColor White
-Write-Host "────────────────────────────────────────────────"
+Write-Host "Claude Code Bootstrapper -- Uninstall (Windows)" -ForegroundColor White
+Write-Host "------------------------------------------------"
 
 if ($DryRun) {
-    Write-Host "DRY RUN MODE — no changes will be made`n" -ForegroundColor Yellow
+    Write-Host "DRY RUN MODE -- no changes will be made`n" -ForegroundColor Yellow
 }
 
 if (-not (Test-Path $VersionFile)) {
@@ -70,7 +70,7 @@ $installedFiles = @(
     $VersionFile
 )
 
-# ── Option A: Restore from backup ─────────────────────────────────────────────
+# -- Option A: Restore from backup ---------------------------------------------
 
 if ($RestoreBackup) {
     Heading "Restoring from backup: $RestoreBackup"
@@ -102,7 +102,7 @@ if ($RestoreBackup) {
                 $currentMtime = (Get-Item $dst).LastWriteTime
                 $backupMtime  = $item.LastWriteTime
                 if ($currentMtime -gt $backupMtime) {
-                    Warn "Skipping ~/.claude/$($item.Name) — modified after backup was taken (remove manually to restore)"
+                    Warn "Skipping ~/.claude/$($item.Name) -- modified after backup was taken (remove manually to restore)"
                     continue
                 }
             }
@@ -117,7 +117,7 @@ if ($RestoreBackup) {
     exit 0
 }
 
-# ── Option B: Remove bootstrapper files ───────────────────────────────────────
+# -- Option B: Remove bootstrapper files ---------------------------------------
 
 Heading "Removing bootstrapper files"
 
@@ -154,10 +154,10 @@ function Remove-ClaudeMdSection {
             Ok "Bootstrap section removed from ~/.claude/CLAUDE.md"
         } else {
             Remove-Item $dst -Force
-            Ok "CLAUDE.md was empty after removal — deleted"
+            Ok "CLAUDE.md was empty after removal -- deleted"
         }
     } else {
-        # No sentinel found — file was created wholesale by the installer
+        # No sentinel found -- file was created wholesale by the installer
         Invoke-Dry "Remove ~/.claude/CLAUDE.md" { Remove-Item $dst -Force }
         Ok "Removed: ~/.claude/CLAUDE.md"
     }

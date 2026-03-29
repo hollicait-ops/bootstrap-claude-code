@@ -1,17 +1,17 @@
-# lib/helpers.ps1 — Shared helper functions for install.ps1 / uninstall.ps1
+# lib/helpers.ps1 -- Shared helper functions for install.ps1 / uninstall.ps1
 # Dot-source this file: . "$PSScriptRoot\..\lib\helpers.ps1"
 
 $script:HelpersDir = $PSScriptRoot
 $script:ProjectDir = Split-Path $PSScriptRoot -Parent
 
-# ─── UTF-8 file writing ───────────────────────────────────────────────────────
+# --- UTF-8 file writing -------------------------------------------------------
 # Writes a string as UTF-8 without BOM (safe for both PS 5.1 and PS 7).
 function Write-Utf8 ([string]$Path, [string]$Content) {
     $enc = New-Object System.Text.UTF8Encoding $false
     [System.IO.File]::WriteAllText($Path, $Content, $enc)
 }
 
-# ─── PSCustomObject property helper ──────────────────────────────────────────
+# --- PSCustomObject property helper ------------------------------------------
 # Add or overwrite a named property on a PSCustomObject.
 function Set-ObjProp ($Object, [string]$Name, $Value) {
     if ($null -ne $Object.PSObject.Properties[$Name]) {
@@ -21,7 +21,7 @@ function Set-ObjProp ($Object, [string]$Name, $Value) {
     }
 }
 
-# ─── Dry-run wrapper ──────────────────────────────────────────────────────────
+# --- Dry-run wrapper ----------------------------------------------------------
 # Requires: $DryRun variable in caller scope.
 function Invoke-Dry ([string]$Description, [scriptblock]$Action) {
     if ($DryRun) {
@@ -31,7 +31,7 @@ function Invoke-Dry ([string]$Description, [scriptblock]$Action) {
     }
 }
 
-# ─── Interactive confirmation ─────────────────────────────────────────────────
+# --- Interactive confirmation -------------------------------------------------
 # Requires: $Unattended and $Force variables in caller scope.
 function Confirm-Action ([string]$Prompt = "Continue?") {
     if ($Unattended -or $Force) { return $true }
@@ -39,7 +39,7 @@ function Confirm-Action ([string]$Prompt = "Continue?") {
     return ($reply -match '^[Yy]$')
 }
 
-# ─── Package manager detection ───────────────────────────────────────────────
+# --- Package manager detection -----------------------------------------------
 function Get-WinPkgManager {
     if (Get-Command winget -ErrorAction SilentlyContinue) { return "winget" }
     if (Get-Command choco  -ErrorAction SilentlyContinue) { return "choco"  }
@@ -47,12 +47,12 @@ function Get-WinPkgManager {
     return "unknown"
 }
 
-# ─── JSON merge helpers ───────────────────────────────────────────────────────
+# --- JSON merge helpers -------------------------------------------------------
 # Merge two settings.json files: source values added non-destructively to target.
 # Returns merged JSON string.
 # Uses an ordered hashtable as the output to avoid PS 5.1 PSCustomObject mutation
 # bugs where ConvertTo-Json collapses arrays that were originally single-element
-# (ConvertFrom-Json unwraps ["x"] → "x" on PS 5.1, breaking in-place reassignment).
+# (ConvertFrom-Json unwraps ["x"] -> "x" on PS 5.1, breaking in-place reassignment).
 function Merge-SettingsJson ([string]$SourcePath, [string]$TargetPath) {
     $src = Get-Content $SourcePath -Raw | ConvertFrom-Json
     $tgt = Get-Content $TargetPath -Raw | ConvertFrom-Json

@@ -3,7 +3,7 @@
 # Run with: Invoke-Pester tests/unit/helpers.Tests.ps1
 
 # DryRun, Unattended, Force are set in test scope and read by helper functions
-# (Invoke-Dry, Confirm-Action) via caller-scope variable lookup — not a bug.
+# (Invoke-Dry, Confirm-Action) via caller-scope variable lookup -- not a bug.
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
 param()
 
@@ -13,7 +13,7 @@ BeforeAll {
     . (Join-Path $script:ProjectDir "lib/helpers.ps1")
 }
 
-# ─── Write-Utf8 ──────────────────────────────────────────────────────────────
+# --- Write-Utf8 --------------------------------------------------------------
 
 Describe "Write-Utf8" {
     It "writes file content correctly" {
@@ -27,7 +27,7 @@ Describe "Write-Utf8" {
         $tmp = [System.IO.Path]::GetTempFileName()
         Write-Utf8 $tmp "test"
         $bytes = [System.IO.File]::ReadAllBytes($tmp)
-        # UTF-8 BOM is 0xEF 0xBB 0xBF — must not be present
+        # UTF-8 BOM is 0xEF 0xBB 0xBF -- must not be present
         $bytes[0] | Should -Not -Be 0xEF
         Remove-Item $tmp
     }
@@ -41,7 +41,7 @@ Describe "Write-Utf8" {
     }
 }
 
-# ─── Set-ObjProp ─────────────────────────────────────────────────────────────
+# --- Set-ObjProp -------------------------------------------------------------
 
 Describe "Set-ObjProp" {
     It "adds a new property" {
@@ -63,7 +63,7 @@ Describe "Set-ObjProp" {
     }
 }
 
-# ─── Invoke-Dry ──────────────────────────────────────────────────────────────
+# --- Invoke-Dry --------------------------------------------------------------
 
 Describe "Invoke-Dry" {
     It "executes action when DryRun is false" {
@@ -81,7 +81,7 @@ Describe "Invoke-Dry" {
     }
 }
 
-# ─── Confirm-Action ──────────────────────────────────────────────────────────
+# --- Confirm-Action ----------------------------------------------------------
 
 Describe "Confirm-Action" {
     It "returns true when Unattended is set" {
@@ -99,7 +99,7 @@ Describe "Confirm-Action" {
     # The interactive N path (user types "N" or presses Enter at the [y/N] prompt)
     # returns $false. This path is not covered by an automated test because
     # Confirm-Action uses Read-Host, which reads directly from the PowerShell
-    # console host rather than from stdin — stdin redirection or mocking via
+    # console host rather than from stdin -- stdin redirection or mocking via
     # $Input does not work. The behaviour is: any reply that does not match
     # '^[Yy]$' (including empty string, "n", "N", or any other text) causes
     # Confirm-Action to return $false.
@@ -107,7 +107,7 @@ Describe "Confirm-Action" {
     # parameter the N path can be unit-tested without a real interactive session.
 }
 
-# ─── Get-WinPkgManager ───────────────────────────────────────────────────────
+# --- Get-WinPkgManager -------------------------------------------------------
 
 Describe "Get-WinPkgManager" {
     It "returns a known value" {
@@ -115,7 +115,7 @@ Describe "Get-WinPkgManager" {
     }
 }
 
-# ─── Merge-SettingsJson ──────────────────────────────────────────────────────
+# --- Merge-SettingsJson ------------------------------------------------------
 
 Describe "Merge-SettingsJson" {
     BeforeAll {
@@ -178,7 +178,7 @@ Describe "Merge-SettingsJson" {
     }
 }
 
-# ─── Merge-KeybindingsJson ───────────────────────────────────────────────────
+# --- Merge-KeybindingsJson ---------------------------------------------------
 
 Describe "Merge-KeybindingsJson" {
     BeforeAll {
@@ -187,7 +187,7 @@ Describe "Merge-KeybindingsJson" {
     }
 
     It "existing key slot is not overwritten" {
-        # Avoid @() pipeline wrap — ConvertFrom-Json already returns System.Object[] in PS 5.1
+        # Avoid @() pipeline wrap -- ConvertFrom-Json already returns System.Object[] in PS 5.1
         $result = Merge-KeybindingsJson $script:KbSrc $script:KbTgt | ConvertFrom-Json
         ($result | Where-Object { $_.key -eq "ctrl+a" }).command | Should -Be "custom-cmd-a"
     }

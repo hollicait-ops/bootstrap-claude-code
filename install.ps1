@@ -1,5 +1,5 @@
 #Requires -Version 5.1
-# install.ps1 — Claude Code Bootstrapper for Windows
+# install.ps1 -- Claude Code Bootstrapper for Windows
 # Sets up best-practice ~/.claude/ configurations for new Claude Code users.
 # Usage: .\install.ps1 [-DryRun] [-Force] [-Minimal] [-Unattended] [-Verify]
 #
@@ -15,7 +15,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-# ─── Constants ────────────────────────────────────────────────────────────────
+# --- Constants ----------------------------------------------------------------
 
 $BootstrapperVersion = "1.0.0"
 $ClaudeDir           = Join-Path $HOME ".claude"
@@ -29,7 +29,7 @@ $VersionFile         = Join-Path $ClaudeDir ".bootstrapper-version"
 #                      Get-WinPkgManager, Merge-SettingsJson, Merge-KeybindingsJson)
 . "$ScriptDir\lib\helpers.ps1"
 
-# ─── Platform Guard ───────────────────────────────────────────────────────────
+# --- Platform Guard -----------------------------------------------------------
 # $IsWindows is only defined in PowerShell 6+; PS 5.1 is Windows-only so default true.
 
 $RunningOnWindows = if ($PSVersionTable.PSVersion.Major -ge 6) { $IsWindows } else { $true }
@@ -38,7 +38,7 @@ if (-not $RunningOnWindows) {
     exit 1
 }
 
-# ─── Logging ──────────────────────────────────────────────────────────────────
+# --- Logging ------------------------------------------------------------------
 # Write-Utf8, Set-ObjProp, Invoke-Dry, Confirm-Action, Get-WinPkgManager,
 # Merge-SettingsJson, Merge-KeybindingsJson are provided by lib/helpers.ps1 (loaded above).
 
@@ -48,7 +48,7 @@ function Warn    ([string]$Msg) { Write-Host "[warn]  $Msg" -ForegroundColor Yel
 function Err     ([string]$Msg) { Write-Host "[error] $Msg" -ForegroundColor Red }
 function Heading ([string]$Msg) { Write-Host "`n$Msg" -ForegroundColor White }
 
-# ─── Phase 1: Preflight Checks ────────────────────────────────────────────────
+# --- Phase 1: Preflight Checks ------------------------------------------------
 
 function Invoke-CheckClaude {
     if (Get-Command claude -ErrorAction SilentlyContinue) {
@@ -74,12 +74,12 @@ function Invoke-CheckClaude {
                     "scoop"  { scoop install nodejs }
                     default  {
                         Warn "No supported package manager found. Install Node.js from https://nodejs.org then re-run."
-                        Warn "Continuing without Claude Code — configs will be pre-staged."
+                        Warn "Continuing without Claude Code -- configs will be pre-staged."
                         return
                     }
                 }
             } else {
-                Warn "Continuing without Claude Code — configs will be pre-staged."
+                Warn "Continuing without Claude Code -- configs will be pre-staged."
                 return
             }
         }
@@ -87,7 +87,7 @@ function Invoke-CheckClaude {
         $claudeCmd = Get-Command claude -ErrorAction SilentlyContinue
         Ok "Claude Code installed: $(if ($claudeCmd) { $claudeCmd.Source } else { 'unknown location' })"
     } else {
-        Warn "Continuing without Claude Code — configs will be pre-staged for when you install it."
+        Warn "Continuing without Claude Code -- configs will be pre-staged for when you install it."
     }
 }
 
@@ -106,7 +106,7 @@ function Invoke-Preflight {
         exit 1
     }
 
-    # WSL detection — recommend install.sh inside WSL instead
+    # WSL detection -- recommend install.sh inside WSL instead
     if ($env:WSL_DISTRO_NAME -or $env:WSLENV) {
         Warn "WSL environment detected. For WSL, use the bash installer instead:"
         Warn "  ./install.sh"
@@ -155,7 +155,7 @@ function Invoke-Preflight {
     }
 }
 
-# ─── Phase 2: Backup Existing Configs ─────────────────────────────────────────
+# --- Phase 2: Backup Existing Configs -----------------------------------------
 
 function Invoke-Backup {
     Heading "Phase 2: Backup existing configs"
@@ -196,7 +196,7 @@ function Invoke-Backup {
     if ($backedUp) { Log "Backup location: $BackupDir" }
 }
 
-# ─── Phase 3: Directory Setup ─────────────────────────────────────────────────
+# --- Phase 3: Directory Setup -------------------------------------------------
 
 function Invoke-SetupDirs {
     Heading "Phase 3: Setting up directory structure"
@@ -217,7 +217,7 @@ function Invoke-SetupDirs {
     }
 }
 
-# ─── Phase 4: Install Templates ───────────────────────────────────────────────
+# --- Phase 4: Install Templates -----------------------------------------------
 # Merge-SettingsJson and Merge-KeybindingsJson are provided by lib/helpers.ps1
 
 function Install-SettingsJson {
@@ -226,7 +226,7 @@ function Install-SettingsJson {
 
     Log "Installing settings.json..."
 
-    if (-not (Test-Path $src)) { Warn "Template not found: $src — skipping"; return }
+    if (-not (Test-Path $src)) { Warn "Template not found: $src -- skipping"; return }
 
     if ((Test-Path $dst) -and -not $Force) {
         Log "Merging with existing settings.json"
@@ -252,7 +252,7 @@ function Install-ClaudeMd {
 
     Log "Installing CLAUDE.md..."
 
-    if (-not (Test-Path $src)) { Warn "Template not found: $src — skipping"; return }
+    if (-not (Test-Path $src)) { Warn "Template not found: $src -- skipping"; return }
 
     if ($DryRun) {
         Write-Host "[dry-run] Would append/update bootstrap section in $dst" -ForegroundColor Yellow
@@ -288,7 +288,7 @@ function Install-Keybindings {
 
     Log "Installing keybindings.json..."
 
-    if (-not (Test-Path $src)) { Warn "Template not found: $src — skipping"; return }
+    if (-not (Test-Path $src)) { Warn "Template not found: $src -- skipping"; return }
 
     if ((Test-Path $dst) -and -not $Force) {
         $merged = Merge-KeybindingsJson $src $dst
@@ -311,10 +311,10 @@ function Install-Memory {
 
     Log "Installing memory/MEMORY.md..."
 
-    if (-not (Test-Path $src)) { Warn "Template not found: $src — skipping"; return }
+    if (-not (Test-Path $src)) { Warn "Template not found: $src -- skipping"; return }
 
     if (Test-Path $dst) {
-        Log "memory/MEMORY.md already exists — skipping (never overwrite user memory)"
+        Log "memory/MEMORY.md already exists -- skipping (never overwrite user memory)"
     } else {
         Invoke-Dry "Copy MEMORY.md to $dst" {
             Copy-Item $src $dst
@@ -379,13 +379,13 @@ function Install-Hooks {
 
     $hooksSrc = Join-Path $TemplatesDir "hooks"
     if (-not (Test-Path $hooksSrc -PathType Container)) {
-        Warn "No hooks/ template directory found — skipping"
+        Warn "No hooks/ template directory found -- skipping"
         return
     }
 
     $ps1Hooks = @(Get-ChildItem $hooksSrc -Filter "*.ps1" -ErrorAction SilentlyContinue)
     if (-not $ps1Hooks) {
-        Warn "No .ps1 hook templates found in $hooksSrc — skipping"
+        Warn "No .ps1 hook templates found in $hooksSrc -- skipping"
         return
     }
 
@@ -411,7 +411,7 @@ function Install-Commands {
 
     $commandsSrc = Join-Path $TemplatesDir "commands"
     if (-not (Test-Path $commandsSrc -PathType Container)) {
-        Warn "No commands/ template directory found — skipping"
+        Warn "No commands/ template directory found -- skipping"
         return
     }
 
@@ -438,7 +438,7 @@ function Install-All {
     Install-Commands
 }
 
-# ─── Phase 5: Verify ──────────────────────────────────────────────────────────
+# --- Phase 5: Verify ----------------------------------------------------------
 
 function Invoke-Verify {
     Heading "Phase 5: Verification"
@@ -528,13 +528,13 @@ function Write-NextSteps {
     Write-Host ""
 }
 
-# ─── Main ─────────────────────────────────────────────────────────────────────
+# --- Main ---------------------------------------------------------------------
 
 Write-Host "Claude Code Bootstrapper v$BootstrapperVersion (Windows)" -ForegroundColor White
-Write-Host "────────────────────────────────────────────────────────"
+Write-Host "--------------------------------------------------------"
 
 if ($DryRun) {
-    Write-Host "DRY RUN MODE — no changes will be made`n" -ForegroundColor Yellow
+    Write-Host "DRY RUN MODE -- no changes will be made`n" -ForegroundColor Yellow
 }
 
 if ($Verify) {

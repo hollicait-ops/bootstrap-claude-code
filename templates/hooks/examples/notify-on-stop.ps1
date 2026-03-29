@@ -1,4 +1,4 @@
-# Notify on Stop Hook — shows a Windows notification when Claude finishes (Windows / PowerShell)
+# Notify on Stop Hook -- shows a Windows notification when Claude finishes (Windows / PowerShell)
 #
 # Installation:
 #   1. Copy this file to: C:\Users\you\.claude\hooks\stop.ps1
@@ -7,11 +7,11 @@
 #
 #      "Stop": [{"hooks":[{"type":"command","command":"pwsh -NonInteractive -ExecutionPolicy Bypass -File \"C:\\Users\\you\\.claude\\hooks\\stop.ps1\""}]}]
 #
-# Two notification methods are provided — use whichever fits your setup.
+# Two notification methods are provided -- use whichever fits your setup.
 # Method A uses BurntToast for a modern Windows 10/11 toast notification (install once).
 # Method B uses only built-in Windows APIs (no extra modules required).
 
-# ── Method A: modern toast via BurntToast module (install once, then uncomment) ──
+# -- Method A: modern toast via BurntToast module (install once, then uncomment) --
 #
 # Install-Module BurntToast -Scope CurrentUser   # run once in a PowerShell window
 #
@@ -19,11 +19,11 @@
 #     New-BurntToastNotification -Text "Claude Code", "Claude has finished." -Silent
 # }
 
-# ── Method B: balloon tip via System.Windows.Forms (built-in, no install needed) ──
+# -- Method B: balloon tip via System.Windows.Forms (built-in, no install needed) --
 #
 # NOTE: Start-Sleep is required here. Without it the script exits before the
 # balloon tip has time to display, because the hook process terminates immediately.
-# WARNING: This sleep blocks Claude Code's next action for ~3.5 s — acceptable
+# WARNING: This sleep blocks Claude Code's next action for ~3.5 s -- acceptable
 # for a notification hook, but avoid longer sleeps in hooks that run frequently.
 #
 # Uncomment the block below to enable Method B:
@@ -33,7 +33,7 @@
 # $notify.Icon    = [System.Drawing.SystemIcons]::Information
 # $notify.Visible = $true
 # $notify.ShowBalloonTip(3000, "Claude Code", "Claude has finished.", [System.Windows.Forms.ToolTipIcon]::Info)
-# # WARNING: This sleep blocks Claude Code's next action for ~3.5 s — required for the balloon tip to display.
+# # WARNING: This sleep blocks Claude Code's next action for ~3.5 s -- required for the balloon tip to display.
 # Start-Sleep -Milliseconds 3500
 # $notify.Dispose()
 

@@ -1,25 +1,25 @@
-# PreToolUse Hook — runs before every tool call (Windows / PowerShell)
+# PreToolUse Hook -- runs before every tool call (Windows / PowerShell)
 #
 # Environment variables available:
-#   CLAUDE_TOOL_NAME   — name of the tool about to run (e.g., "Bash")
-#   CLAUDE_TOOL_INPUT  — JSON-encoded tool input
+#   CLAUDE_TOOL_NAME   -- name of the tool about to run (e.g., "Bash")
+#   CLAUDE_TOOL_INPUT  -- JSON-encoded tool input
 #
 # Exit codes:
-#   0 — allow the tool to run
-#   2 — block the tool (stdout is shown to Claude as the reason)
+#   0 -- allow the tool to run
+#   2 -- block the tool (stdout is shown to Claude as the reason)
 #
 # This template blocks catastrophically destructive shell commands as a
 # last-resort safety net below the deny rules in settings.json.
-# All other behaviors are commented out — opt in by uncommenting.
+# All other behaviors are commented out -- opt in by uncommenting.
 
 $ToolName  = $env:CLAUDE_TOOL_NAME
 $ToolInput = $env:CLAUDE_TOOL_INPUT
 
 # =============================================================================
-# ACTIVE — this code runs automatically on every tool call
+# ACTIVE -- this code runs automatically on every tool call
 # =============================================================================
 
-# ── Safety guard: block catastrophically destructive commands ─────────────────
+# -- Safety guard: block catastrophically destructive commands -----------------
 if ($ToolName -eq 'Bash') {
     $cmd = ''
     try {
@@ -42,13 +42,13 @@ if ($ToolName -eq 'Bash') {
 }
 
 # =============================================================================
-# OPTIONAL — uncomment any section below to enable it
+# OPTIONAL -- uncomment any section below to enable it
 # =============================================================================
 
-# ── Optional: pre-warm bash before each Bash tool call (Windows) ─────────────
+# -- Optional: pre-warm bash before each Bash tool call (Windows) -------------
 # Spawns a throwaway bash process before the actual tool call. If bash stalls
 # during MSYS2 runtime init, the job is killed after 4 s and the real call
-# proceeds with the runtime partially warm — reducing sporadic freeze risk.
+# proceeds with the runtime partially warm -- reducing sporadic freeze risk.
 #
 # if ($ToolName -eq 'Bash') {
 #     $warmJob = Start-Job { bash -c "exit 0" 2>$null }
@@ -56,14 +56,14 @@ if ($ToolName -eq 'Bash') {
 #     $warmJob | Remove-Job -Force
 # }
 
-# ── Optional: log every tool call to an audit file ───────────────────────────
+# -- Optional: log every tool call to an audit file ---------------------------
 # $LogFile  = Join-Path $HOME ".claude\tool-audit.log"
 # $stamp    = (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ')
 # Add-Content -Path $LogFile -Value "$stamp PRE  TOOL=$ToolName"
 
-# ── Optional: require confirmation before any npm publish ────────────────────
+# -- Optional: require confirmation before any npm publish --------------------
 # if ($ToolName -eq 'Bash' -and $cmd -match 'npm publish') {
-#     $reply = Read-Host "About to run: $cmd  — Continue? [y/N]"
+#     $reply = Read-Host "About to run: $cmd  -- Continue? [y/N]"
 #     if ($reply -notmatch '^[Yy]$') { Write-Host "Cancelled by user."; exit 2 }
 # }
 
