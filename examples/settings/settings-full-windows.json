@@ -25,6 +25,7 @@
 
   "permissions": {
     "allow": [
+      // Git -- read-only and safe write operations
       "Bash(git status)",
       "Bash(git diff*)",
       "Bash(git log*)",
@@ -39,6 +40,21 @@
       "Bash(git stash*)",
       "Bash(git merge*)",
       "Bash(git rebase*)",
+      "PowerShell(git status)",
+      "PowerShell(git diff*)",
+      "PowerShell(git log*)",
+      "PowerShell(git show*)",
+      "PowerShell(git blame*)",
+      "PowerShell(git branch*)",
+      "PowerShell(git fetch*)",
+      "PowerShell(git add*)",
+      "PowerShell(git commit*)",
+      "PowerShell(git checkout*)",
+      "PowerShell(git stash*)",
+      "PowerShell(git merge*)",
+      "PowerShell(git rebase*)",
+
+      // File system -- read and safe navigation
       "Bash(ls*)",
       "Bash(pwd)",
       "Bash(cat*)",
@@ -48,18 +64,54 @@
       "Bash(find*)",
       "Bash(grep*)",
       "Bash(which*)",
+      "Bash(mkdir -p*)",
+      "Bash(cp*)",
+      "Bash(mv*)",
+      "Bash(touch*)",
+      "Bash(echo*)",
+      "PowerShell(Get-ChildItem*)",
+      "PowerShell(dir*)",
+      "PowerShell(Get-Location)",
+      "PowerShell(Get-Content*)",
+      "PowerShell(Select-String*)",
+      "PowerShell(Get-Command*)",
+      "PowerShell(Measure-Object*)",
+      "PowerShell(Copy-Item*)",
+      "PowerShell(Move-Item*)",
+      "PowerShell(New-Item*)",
+      "PowerShell(Write-Output*)",
+
+      // Help and version queries
       "Bash(* --version)",
       "Bash(* --help)",
+      "PowerShell(* --version)",
+      "PowerShell(* --help)",
+
+      // Node / npm / yarn / pnpm
       "Bash(npm run*)",
       "Bash(npm test*)",
       "Bash(npm install*)",
       "Bash(yarn*)",
       "Bash(pnpm*)",
+      "PowerShell(npm run*)",
+      "PowerShell(npm test*)",
+      "PowerShell(npm install*)",
+      "PowerShell(yarn*)",
+      "PowerShell(pnpm*)",
+
+      // Native build tools
       "Bash(make*)",
       "Bash(cargo*)",
       "Bash(go build*)",
       "Bash(go test*)",
       "Bash(go fmt*)",
+      "PowerShell(make*)",
+      "PowerShell(cargo*)",
+      "PowerShell(go build*)",
+      "PowerShell(go test*)",
+      "PowerShell(go fmt*)",
+
+      // Python
       "Bash(python* -m pytest*)",
       "Bash(python* -m unittest*)",
       "Bash(pip install*)",
@@ -67,15 +119,37 @@
       "Bash(uv*)",
       "Bash(poetry*)",
       "Bash(pipenv*)",
+      "PowerShell(python* -m pytest*)",
+      "PowerShell(python* -m unittest*)",
+      "PowerShell(pip install*)",
+      "PowerShell(pip3 install*)",
+      "PowerShell(uv*)",
+      "PowerShell(poetry*)",
+      "PowerShell(pipenv*)",
+
+      // Ruby / Elixir
       "Bash(gem install*)",
       "Bash(bundle*)",
       "Bash(mix*)",
       "Bash(hex*)",
+      "PowerShell(gem install*)",
+      "PowerShell(bundle*)",
+      "PowerShell(mix*)",
+      "PowerShell(hex*)",
+
+      // GitHub CLI
       "Bash(gh issue*)",
       "Bash(gh pr*)",
       "Bash(gh repo*)",
       "Bash(gh run*)",
       "Bash(gh release*)",
+      "PowerShell(gh issue*)",
+      "PowerShell(gh pr*)",
+      "PowerShell(gh repo*)",
+      "PowerShell(gh run*)",
+      "PowerShell(gh release*)",
+
+      // Docker / Podman
       "Bash(docker build*)",
       "Bash(docker run*)",
       "Bash(docker ps*)",
@@ -87,37 +161,77 @@
       "Bash(podman build*)",
       "Bash(podman run*)",
       "Bash(podman ps*)",
+      "PowerShell(docker build*)",
+      "PowerShell(docker run*)",
+      "PowerShell(docker ps*)",
+      "PowerShell(docker images*)",
+      "PowerShell(docker logs*)",
+      "PowerShell(docker-compose up*)",
+      "PowerShell(docker-compose down*)",
+      "PowerShell(docker-compose build*)",
+      "PowerShell(podman build*)",
+      "PowerShell(podman run*)",
+      "PowerShell(podman ps*)",
+
+      // Kubernetes / Helm -- read only
       "Bash(kubectl get*)",
       "Bash(kubectl describe*)",
       "Bash(kubectl logs*)",
       "Bash(helm list*)",
       "Bash(helm status*)",
+      "PowerShell(kubectl get*)",
+      "PowerShell(kubectl describe*)",
+      "PowerShell(kubectl logs*)",
+      "PowerShell(helm list*)",
+      "PowerShell(helm status*)",
+
+      // Terraform / OpenTofu -- read only
       "Bash(terraform init*)",
       "Bash(terraform plan*)",
       "Bash(terraform validate*)",
       "Bash(tofu init*)",
       "Bash(tofu plan*)",
       "Bash(tofu validate*)",
-      "Bash(mkdir -p*)",
-      "Bash(cp*)",
-      "Bash(mv*)",
-      "Bash(touch*)",
-      "Bash(echo*)"
+      "PowerShell(terraform init*)",
+      "PowerShell(terraform plan*)",
+      "PowerShell(terraform validate*)",
+      "PowerShell(tofu init*)",
+      "PowerShell(tofu plan*)",
+      "PowerShell(tofu validate*)"
     ],
     "deny": [
+      // Destructive filesystem operations
       "Bash(rm -rf /)",
       "Bash(rm -rf ~)",
       "Bash(rm -rf $HOME)",
       "Bash(rm -rf /home*)",
+      "PowerShell(Remove-Item -Recurse -Force C:\\*)",
+      "PowerShell(Remove-Item -Recurse * $HOME*)",
+      "PowerShell(Remove-Item -Recurse * $env:USERPROFILE*)",
+      "PowerShell(Remove-Item -Recurse * C:\\Users*)",
+
+      // Force push and hard reset
       "Bash(git push --force*)",
       "Bash(git push -f*)",
       "Bash(git reset --hard*)",
+      "PowerShell(git push --force*)",
+      "PowerShell(git push -f*)",
+      "PowerShell(git reset --hard*)",
+
+      // Shell injection
       "Bash(echo* | bash*)",
       "Bash(echo* | sh*)",
       "Bash(echo* | zsh*)",
       "Bash(echo* | dash*)",
+      "PowerShell(Invoke-Expression*)",
+      "PowerShell(iex *)",
+
+      // Other dangerous commands
       "Bash(sudo rm*)",
       "Bash(chmod 777*)",
+      "Bash(dd if=/dev/*)",
+
+      // Secrets and credentials
       "Read(.env)",
       "Read(.env.*)",
       "Read(**/.env)",
@@ -128,7 +242,6 @@
       "Read(~/.ssh/**)",
       "Read(~/.gnupg/**)",
       "Read(~/.config/gh/hosts.yml)",
-      "Bash(dd if=/dev/*)",
       "Edit(.env)",
       "Edit(.env.*)",
       "Edit(**/.env)",
@@ -139,31 +252,71 @@
       "Write(**/.env.*)"
     ],
     "ask": [
+      // Git -- publishing and destructive ops require confirmation
       "Bash(git push*)",
       "Bash(git push --force-with-lease*)",
+      "PowerShell(git push*)",
+      "PowerShell(git push --force-with-lease*)",
+
+      // Package publishing
       "Bash(npm publish*)",
       "Bash(yarn publish*)",
       "Bash(pnpm publish*)",
+      "PowerShell(npm publish*)",
+      "PowerShell(yarn publish*)",
+      "PowerShell(pnpm publish*)",
+
+      // Network requests
       "Bash(curl*)",
       "Bash(wget*)",
+      "PowerShell(Invoke-WebRequest*)",
+      "PowerShell(Invoke-RestMethod*)",
+
+      // Deletion
       "Bash(rm -rf*)",
+      "PowerShell(Remove-Item*)",
+
+      // Docker / Podman -- destructive ops
       "Bash(docker rm*)",
       "Bash(docker rmi*)",
       "Bash(docker-compose down -v*)",
       "Bash(podman rm*)",
+      "PowerShell(docker rm*)",
+      "PowerShell(docker rmi*)",
+      "PowerShell(docker-compose down -v*)",
+      "PowerShell(podman rm*)",
+
+      // Databases
       "Bash(psql*)",
       "Bash(mysql*)",
       "Bash(mongosh*)",
       "Bash(redis-cli*)",
+      "PowerShell(psql*)",
+      "PowerShell(mysql*)",
+      "PowerShell(mongosh*)",
+      "PowerShell(redis-cli*)",
+
+      // Kubernetes / Helm -- mutating ops
       "Bash(kubectl apply*)",
       "Bash(kubectl delete*)",
       "Bash(helm install*)",
       "Bash(helm upgrade*)",
       "Bash(helm uninstall*)",
+      "PowerShell(kubectl apply*)",
+      "PowerShell(kubectl delete*)",
+      "PowerShell(helm install*)",
+      "PowerShell(helm upgrade*)",
+      "PowerShell(helm uninstall*)",
+
+      // Terraform / OpenTofu -- mutating ops
       "Bash(terraform apply*)",
       "Bash(terraform destroy*)",
       "Bash(tofu apply*)",
-      "Bash(tofu destroy*)"
+      "Bash(tofu destroy*)",
+      "PowerShell(terraform apply*)",
+      "PowerShell(terraform destroy*)",
+      "PowerShell(tofu apply*)",
+      "PowerShell(tofu destroy*)"
     ]
   },
 
