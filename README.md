@@ -207,7 +207,7 @@ project or merge into `~/.claude/mcp.json`.
 | `CLAUDE.md-python-project` | Python repos -- includes test runner, linting, import conventions |
 | `CLAUDE.md-web-app` | React/Node web apps -- frontend patterns, API conventions |
 | `CLAUDE.md-global-persona` | Global `~/.claude/CLAUDE.md` -- personal style and commit preferences |
-| `CLAUDE.md-windows` | Global `~/.claude/CLAUDE.md` -- Windows-specific: bash freeze workaround + PowerShell syntax |
+| `CLAUDE.md-windows` | Global `~/.claude/CLAUDE.md` -- Windows-specific: PowerShell syntax instructions |
 
 Copy the template that fits your project to `~/.claude/CLAUDE.md` (global) or
 `.claude/CLAUDE.md` (project-specific) and customize from there.

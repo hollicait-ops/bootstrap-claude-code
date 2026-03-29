@@ -1,11 +1,5 @@
 # Global Claude Instructions (Windows)
 
-## Windows bash freeze workaround
-
-Always output at least one line of text before making any Bash tool call.
-This prevents a UI race condition where the terminal window freezes when bash
-is the first operation in a response.
-
 ## PowerShell syntax
 
 Use PowerShell-native syntax in all Bash tool calls. This means:

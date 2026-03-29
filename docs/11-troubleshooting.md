@@ -219,8 +219,6 @@ Remove-Item -Recurse -Force "$env:USERPROFILE\.claude\shell-snapshots"
 
 This may need to be done periodically if freezes recur.
 
-**Secondary cause -- UI race condition:** If the first thing Claude does in a response is open a Bash tool window (no text output preceding it), the terminal can freeze. Adding a global CLAUDE.md instruction to always output text before Bash calls prevents this -- see the template at [`examples/claude-md/CLAUDE.md-windows`](../examples/claude-md/CLAUDE.md-windows).
-
 **Other things to check:**
 - `.bashrc` or `.bash_profile` contain slow operations (network calls, heavy path scans)
 - Home directory is on a network drive -- Git Bash resolves `~` on startup

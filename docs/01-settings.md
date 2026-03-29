@@ -97,7 +97,7 @@ Use PowerShell-native syntax in all Bash tool calls. This means:
 - Use `$env:VAR` instead of `$VAR` for environment variables
 ```
 
-This overrides Claude Code's built-in "use Unix shell syntax" default. Without it, Claude may still generate bash-style commands even when PowerShell is configured. A ready-to-use template combining both Windows instructions is at [`examples/claude-md/CLAUDE.md-windows`](../examples/claude-md/CLAUDE.md-windows).
+This overrides Claude Code's built-in "use Unix shell syntax" default. Without it, Claude may still generate bash-style commands even when PowerShell is configured. A ready-to-use template is at [`examples/claude-md/CLAUDE.md-windows`](../examples/claude-md/CLAUDE.md-windows).
 
 ---
 
