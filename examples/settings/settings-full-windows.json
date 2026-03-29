@@ -7,6 +7,17 @@
   //
   // Use powershell.exe instead of pwsh if PowerShell 7 is not installed.
 
+  // Enable the native PowerShell tool (opt-in preview).
+  // This adds a PowerShell execution path alongside the Bash tool.
+  // Git Bash is still required underneath -- do NOT set shellPath to powershell.exe.
+  //
+  // Also add the PowerShell syntax instruction to ~/.claude/CLAUDE.md so that
+  // Claude generates PowerShell-native commands. See examples/claude-md/CLAUDE.md-windows.
+  "env": {
+    "CLAUDE_CODE_USE_POWERSHELL_TOOL": "1"
+  },
+  "defaultShell": "powershell",
+
   "model": "claude-sonnet-4-6",
   "theme": "dark",
   "autoMemory": true,

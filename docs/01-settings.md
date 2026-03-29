@@ -48,6 +48,59 @@ Project settings override global settings. Local settings override project setti
 > Standard JSON validators (e.g. `python3 -m json.tool`) will reject commented files —
 > use a JSONC-aware linter such as VS Code's built-in JSON language server instead.
 
+## Shell Configuration (Windows)
+
+Claude Code uses **Git Bash** as its underlying shell on Windows (required -- it cannot be replaced). By default it also generates **Unix shell syntax** regardless of what you have configured. There are two separate problems Windows users typically face, with different solutions:
+
+### Problem 1: Bash commands freeze or hang
+
+The most common cause is the `.claude/shell-snapshots/` directory accumulating corrupted files. Clear it:
+
+```powershell
+Remove-Item -Recurse -Force "$env:USERPROFILE\.claude\shell-snapshots"
+```
+
+This may need to be done periodically. See [troubleshooting](11-troubleshooting.md) for the full freeze diagnosis.
+
+### Problem 2: Commands use Unix syntax instead of PowerShell
+
+Two steps are needed -- one to enable the native PowerShell tool, one to make Claude generate PowerShell syntax.
+
+**Step 1 -- Enable the PowerShell tool in `settings.json`:**
+
+```json
+{
+  "env": {
+    "CLAUDE_CODE_USE_POWERSHELL_TOOL": "1"
+  },
+  "defaultShell": "powershell"
+}
+```
+
+`CLAUDE_CODE_USE_POWERSHELL_TOOL` enables an opt-in preview PowerShell tool alongside the Bash tool. `defaultShell: "powershell"` routes interactive (`!`) commands through PowerShell. Claude Code auto-detects `pwsh.exe` (PowerShell 7+) with fallback to `powershell.exe` (5.1).
+
+> **Important:** Do **not** set `shellPath` or `env.SHELL` to `powershell.exe`/`pwsh.exe`. The Bash tool requires Git Bash as its POSIX shell. Setting `shellPath` to PowerShell breaks the Bash tool entirely with "No suitable shell found."
+
+> **Preview limitations:** Auto mode is not supported with the PowerShell tool. PowerShell profiles are not loaded. Sandboxing is not supported.
+
+**Step 2 -- Add a PowerShell syntax instruction to `~/.claude/CLAUDE.md`:**
+
+```markdown
+## PowerShell syntax
+
+Use PowerShell-native syntax when executing shell commands. This means:
+- Use `$null` instead of `/dev/null`
+- Use backslashes in Windows paths (e.g. `C:\Users\...`)
+- Use PowerShell cmdlets (Get-ChildItem, Get-Content, Select-String, etc.)
+- Use semicolons or pipeline operators, not `&&` to chain commands
+- Use `Remove-Item` instead of `rm`, `Copy-Item` instead of `cp`, etc.
+- Use `$env:VAR` instead of `$VAR` for environment variables
+```
+
+This overrides Claude Code's built-in "use Unix shell syntax" default. Without it, Claude may still generate bash-style commands even when PowerShell is configured. A ready-to-use template is at [`examples/claude-md/CLAUDE.md-windows`](../examples/claude-md/CLAUDE.md-windows).
+
+---
+
 ## Core Settings
 
 ```json
