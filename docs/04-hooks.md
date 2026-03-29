@@ -94,7 +94,8 @@ The `matcher` field (for PreToolUse/PostToolUse) is a tool name or `"*"` for all
 Use this for notifications or logging where you don't need the result before
 Claude continues.
 
-**`if` field** — Conditionally fire the hook using permission rule syntax:
+**`if` field** — Conditionally fire the hook using the same permission rule
+syntax as `settings.json` allow/deny rules (see [01-settings.md](01-settings.md)):
 
 ```json
 {
@@ -105,16 +106,17 @@ Claude continues.
 ```
 
 The hook only runs when the tool call matches the `if` pattern. Useful for
-narrowing a broad `"*"` matcher to specific commands.
+narrowing a broad `"*"` matcher to specific commands without needing separate
+hook entries.
 
 ### Hook Types
 
-| Type | Description |
-|------|-------------|
-| `command` | Run a shell command |
-| `prompt` | Evaluate a condition with an LLM (PreToolUse/PostToolUse only) |
-| `agent` | Spawn a subagent for complex validation (PreToolUse/PostToolUse only) |
-| `http` | POST the hook input JSON to a URL |
+| Type | When to use | Availability |
+|------|-------------|--------------|
+| `command` | Run a shell script or CLI command | All events |
+| `prompt` | Ask an LLM to evaluate a condition (e.g. "is this safe?") | PreToolUse, PostToolUse only |
+| `agent` | Spawn a full subagent for complex multi-step validation | PreToolUse, PostToolUse only |
+| `http` | POST the hook payload to a URL (webhooks, external services) | All events |
 
 ## Hook Script Template
 
