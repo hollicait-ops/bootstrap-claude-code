@@ -206,9 +206,13 @@
       "Bash(rm -rf $HOME)",
       "Bash(rm -rf /home*)",
       "PowerShell(Remove-Item -Recurse -Force C:\\*)",
+      "PowerShell(Remove-Item -Recurse C:\\*)",
       "PowerShell(Remove-Item -Recurse * $HOME*)",
+      "PowerShell(Remove-Item -Recurse $HOME*)",
       "PowerShell(Remove-Item -Recurse * $env:USERPROFILE*)",
+      "PowerShell(Remove-Item -Recurse $env:USERPROFILE*)",
       "PowerShell(Remove-Item -Recurse * C:\\Users*)",
+      "PowerShell(Remove-Item -Recurse C:\\Users*)",
 
       // Force push and hard reset
       "Bash(git push --force*)",
@@ -224,7 +228,7 @@
       "Bash(echo* | zsh*)",
       "Bash(echo* | dash*)",
       "PowerShell(Invoke-Expression*)",
-      "PowerShell(iex *)",
+      "PowerShell(iex*)",
 
       // Other dangerous commands
       "Bash(sudo rm*)",
