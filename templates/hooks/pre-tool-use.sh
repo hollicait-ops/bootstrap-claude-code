@@ -17,10 +17,12 @@ TOOL_NAME="${CLAUDE_TOOL_NAME:-}"
 TOOL_INPUT="${CLAUDE_TOOL_INPUT:-}"
 
 # ── Safety guard: block root/home recursive deletes ─────────────────────────
-if [[ "$TOOL_NAME" == "Bash" ]] && ! command -v python3 &>/dev/null; then
-  echo "Warning: python3 not found — recursive-delete safety guard is disabled" >&2
-elif [[ "$TOOL_NAME" == "Bash" ]]; then
-  COMMAND="$(TOOL_INPUT="$TOOL_INPUT" python3 -c "
+if [[ "$TOOL_NAME" == "Bash" ]]; then
+  # Extract the command from JSON input.
+  # Use python3 if available; fall back to grep/sed so the guard stays active
+  # even on systems without python3.
+  if command -v python3 &>/dev/null; then
+    COMMAND="$(TOOL_INPUT="$TOOL_INPUT" python3 -c "
 import os, json
 try:
     d = json.loads(os.environ['TOOL_INPUT'])
@@ -28,6 +30,14 @@ try:
 except Exception:
     pass
 " 2>/dev/null)"
+  else
+    # Shell-only fallback: extract the "command" field value from JSON.
+    # Handles standard single-line JSON; good enough for safety pattern matching.
+    COMMAND="$(printf '%s' "$TOOL_INPUT" \
+      | grep -o '"command"[[:space:]]*:[[:space:]]*"[^"]*"' \
+      | head -1 \
+      | sed 's/.*"command"[[:space:]]*:[[:space:]]*"//; s/"$//')"
+  fi
 
   # Block: rm -rf / or rm -rf ~
   if echo "$COMMAND" | grep -qE 'rm[[:space:]]+-[a-zA-Z]*r[a-zA-Z]*f[[:space:]]+(/|~|/root|\$HOME)'; then
