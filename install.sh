@@ -208,7 +208,7 @@ preflight() {
   check_bash_version
 
   # Detect OS / WSL
-  if grep -qi microsoft /proc/version 2>/dev/null; then
+  if grep -qi microsoft /proc/version 2>/dev/null || [ -n "$WSL_DISTRO_NAME" ]; then
     OS="wsl"
     warn "WSL detected. Configs will be installed to Linux home: ${CLAUDE_DIR}"
     warn "Make sure Claude Code is running in WSL (not Windows) to pick up these configs."
