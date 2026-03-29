@@ -1,0 +1,17 @@
+# Global Claude Instructions (Windows)
+
+## Windows bash freeze workaround
+
+Always output at least one line of text before making any Bash tool call.
+This prevents a UI race condition where the terminal window freezes when bash
+is the first operation in a response.
+
+## PowerShell syntax
+
+Use PowerShell-native syntax in all Bash tool calls. This means:
+- Use `$null` instead of `/dev/null`
+- Use backslashes in Windows paths (e.g. `C:\Users\...`)
+- Use PowerShell cmdlets (Get-ChildItem, Get-Content, Select-String, etc.) instead of Unix equivalents
+- Use semicolons or pipeline operators, not `&&` to chain commands
+- Use `Remove-Item` instead of `rm`, `Copy-Item` instead of `cp`, etc.
+- Use `$env:VAR` instead of `$VAR` for environment variables

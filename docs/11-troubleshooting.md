@@ -194,33 +194,40 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
 ---
 
-## Bash tool freezes sporadically (Windows)
+## Bash tool reports "No suitable shell found" (Windows)
 
-**Symptom:** A Bash tool call hangs indefinitely. This can happen at any point in a session, not just on the first call, and does not occur every time. Closing the frozen window and asking Claude to retry the command usually succeeds.
-
-**Cause:** A UI race condition in Claude Code on Windows — if the first thing Claude does in a response is open a Bash tool window (with no text output preceding it), the terminal window can freeze. Writing any text before the Bash call prevents it.
-
-**Primary mitigation — add a global instruction to `~/.claude/CLAUDE.md`:**
-
-Create or edit `C:\Users\you\.claude\CLAUDE.md` and add:
-
-```markdown
-## Windows bash freeze workaround
-
-Always output at least one line of text before making any Bash tool call.
-This prevents a UI race condition where the terminal window freezes when bash
-is the first operation in a response.
+**Symptom:** Any Bash tool call fails immediately with:
+```
+No suitable shell found. Claude CLI requires a Posix shell environment.
 ```
 
-Claude will follow this instruction in every session.
+**Cause:** `shellPath` (or `env.SHELL`) in `settings.json` is set to `powershell.exe` or `pwsh.exe`. Claude Code requires a POSIX-compatible shell (Git Bash) for the Bash tool and rejects PowerShell outright.
 
-**Secondary mitigation — pre-warm bash at session start (optional):**
+**Fix:** Remove the `shellPath` entry from `~/.claude/settings.json` (Claude Code will auto-detect Git Bash). To enable PowerShell commands, use `CLAUDE_CODE_USE_POWERSHELL_TOOL` instead -- see [Shell Configuration (Windows)](01-settings.md#shell-configuration-windows).
+
+---
+
+## Bash commands freeze or hang (Windows)
+
+**Symptom:** Commands like `find`, `ls`, `grep` hang indefinitely. This can happen at any point in a session -- not just on the first call -- and may resolve by closing the frozen window and retrying.
+
+**Primary cause -- corrupted shell-snapshots:** Claude Code caches shell state in `~/.claude/shell-snapshots/`. When this directory accumulates corrupted entries, subsequent shell calls hang. Clear it:
+
+```powershell
+Remove-Item -Recurse -Force "$env:USERPROFILE\.claude\shell-snapshots"
+```
+
+This may need to be done periodically if freezes recur.
+
+**Secondary cause -- UI race condition:** If the first thing Claude does in a response is open a Bash tool window (no text output preceding it), the terminal can freeze. Adding a global CLAUDE.md instruction to always output text before Bash calls prevents this -- see the template at [`examples/claude-md/CLAUDE.md-windows`](../examples/claude-md/CLAUDE.md-windows).
+
+**Other things to check:**
+- `.bashrc` or `.bash_profile` contain slow operations (network calls, heavy path scans)
+- Home directory is on a network drive -- Git Bash resolves `~` on startup
+
+**Pre-warm bash at session start (optional):**
 
 Uncomment the bash pre-warm block in `~/.claude/hooks/session-start.ps1`. This forces an initial MSYS2 DLL load at session start, which can reduce general bash startup latency.
-
-**If freezes persist:**
-- Check whether `.bashrc` or `.bash_profile` contain slow operations (network calls, heavy path scans).
-- Check whether your home directory is on a network drive — Git Bash resolves `~` on startup.
 
 If `~/.claude/hooks/session-start.ps1` does not exist yet, re-run `.\install.ps1` to create it.
 
