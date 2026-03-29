@@ -34,6 +34,15 @@ Project settings override global settings. Local settings override project setti
 | `theme` | `"dark"`, `"light"`, `"auto"` | Terminal color theme |
 | `autoMemory` | `true` / `false` | Enable automatic memory saving |
 | `includeGitInstructions` | `true` / `false` | Inject git context into sessions |
+| `effortLevel` | `"low"`, `"medium"`, `"high"` | Persisted thinking/effort level. Also set with `/effort`. |
+| `alwaysThinkingEnabled` | `true` / `false` | When `false`, disables extended thinking entirely. Default: enabled for supported models. |
+| `fastMode` | `true` / `false` | Enable fast mode for quicker responses. Also toggle with `/fast`. |
+| `voiceEnabled` | `true` / `false` | Enable voice push-to-talk. Also activate with `/voice`. |
+| `autoMemoryEnabled` | `true` / `false` | Enable auto-memory for this project. When `false`, Claude won't read or write the auto-memory directory. |
+| `autoMemoryDirectory` | path string | Custom path for auto-memory storage. Supports `~/` prefix. Cannot be set in project settings for security. |
+| `defaultView` | `"chat"`, `"transcript"` | Default transcript view. `chat` shows only user/assistant turns; `transcript` shows full tool history. |
+| `showThinkingSummaries` | `true` / `false` | Show thinking summaries in transcript view (Ctrl+O). Default: `false`. |
+| `feedbackSurveyRate` | `0.0` – `1.0` | Probability the session quality survey appears. `0.05` means 5% of sessions. |
 
 ### Model Selection
 
