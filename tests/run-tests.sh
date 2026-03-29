@@ -112,6 +112,15 @@ if [[ "$RUN_INTEGRATION" == "true" ]]; then
     else
       ok "BATS integration tests passed"
     fi
+
+    # PowerShell installer tests (skipped automatically if pwsh unavailable)
+    bats_out=$(bats --tap "${TESTS_DIR}/integration/test_install_ps1.bats" 2>&1 || true)
+    echo "$bats_out"
+    if echo "$bats_out" | grep -q "^not ok"; then
+      err "BATS PS1 integration tests failed"
+    else
+      ok "BATS PS1 integration tests passed (or skipped — pwsh unavailable)"
+    fi
   fi
 fi
 
