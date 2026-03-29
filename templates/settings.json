@@ -49,6 +49,8 @@
       "PowerShell(Get-ChildItem*)",
       "PowerShell(dir*)",
       "PowerShell(Get-Location)",
+      "PowerShell(Set-Location*)",
+      "PowerShell(cd*)",
       "PowerShell(Get-Content*)",
       "PowerShell(Select-String*)",
       "PowerShell(Get-Command*)",
