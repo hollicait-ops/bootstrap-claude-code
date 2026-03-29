@@ -105,3 +105,4 @@ The `docs/` directory contains a complete reference for every Claude Code featur
 | [11-troubleshooting.md](11-troubleshooting.md) | Common problems and how to fix them |
 | [12-plugins.md](12-plugins.md) | Installing and managing plugins |
 | [13-voice-mode.md](13-voice-mode.md) | Voice input with push-to-talk |
+| [14-scheduled-tasks.md](14-scheduled-tasks.md) | Recurring tasks with /loop and /schedule |
