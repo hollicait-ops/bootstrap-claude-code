@@ -668,14 +668,33 @@ write_version_marker() {
 
 print_next_steps() {
   echo ""
-  echo -e "${BOLD}Next steps:${RESET}"
-  echo "  1. Open Claude Code:          claude"
-  echo "  2. Read the user guide:       ${SCRIPT_DIR}/docs/00-overview.md"
-  echo "  3. Customize your CLAUDE.md:  ${CLAUDE_DIR}/CLAUDE.md"
-  echo "  4. Review permissions:        ${CLAUDE_DIR}/settings.json"
-  if [[ -d "${BACKUP_DIR}" ]]; then
-    echo "  5. Previous configs backed up: ${BACKUP_DIR}"
+  echo "════════════════════════════════════════════════════"
+  echo -e "  ${BOLD}Bootstrap complete! Here is what was installed:${RESET}"
+  echo ""
+  echo -e "  ${BOLD}Slash commands${RESET} (type these in Claude Code):"
+  echo "    /commit          - Stage, review, and commit with a structured message"
+  echo "    /review-pr       - Review an open pull request"
+  echo "    /security-check  - Scan the codebase for security issues"
+  echo "    /daily-standup   - Summarize recent work for a standup"
+  echo "    /fix-bug         - Root-cause and fix a bug"
+  if [[ "$MINIMAL" != "true" ]]; then
+    echo ""
+    echo -e "  ${BOLD}Hooks installed${RESET} (~/.claude/hooks/):"
+    echo "    pre-tool-use   - Blocks dangerous rm -rf commands  [ACTIVE]"
+    echo "    post-tool-use  - Automation examples               [edit to enable]"
+    echo "    session-start  - Session setup examples            [edit to enable]"
+    echo "    stop           - Notification examples             [edit to enable]"
   fi
+  echo ""
+  echo -e "  ${BOLD}Next steps:${RESET}"
+  echo "    1. Open Claude Code:          claude"
+  echo "    2. Read the user guide:       ${SCRIPT_DIR}/docs/00-overview.md"
+  echo "    3. Customize your CLAUDE.md:  ${CLAUDE_DIR}/CLAUDE.md"
+  echo "    4. Review permissions:        ${CLAUDE_DIR}/settings.json"
+  if [[ -d "${BACKUP_DIR}" ]]; then
+    echo "    5. Previous configs backed up: ${BACKUP_DIR}"
+  fi
+  echo "════════════════════════════════════════════════════"
   echo ""
 }
 
