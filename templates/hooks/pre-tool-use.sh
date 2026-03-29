@@ -16,6 +16,10 @@
 TOOL_NAME="${CLAUDE_TOOL_NAME:-}"
 TOOL_INPUT="${CLAUDE_TOOL_INPUT:-}"
 
+# =============================================================================
+# ACTIVE — this code runs automatically on every tool call
+# =============================================================================
+
 # ── Safety guard: block root/home recursive deletes ─────────────────────────
 if [[ "$TOOL_NAME" == "Bash" ]]; then
   # Extract the command from JSON input.
@@ -60,6 +64,10 @@ except Exception:
     exit 2
   fi
 fi
+
+# =============================================================================
+# OPTIONAL — uncomment any section below to enable it
+# =============================================================================
 
 # ── Optional: log every tool call to an audit file ──────────────────────────
 # LOG_FILE="${HOME}/.claude/tool-audit.log"

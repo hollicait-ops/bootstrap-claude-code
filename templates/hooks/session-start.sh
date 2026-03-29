@@ -2,7 +2,12 @@
 # SessionStart Hook — runs when a new Claude Code session begins
 #
 # Use for: environment checks, welcome messages, context loading, reminders.
-# All behaviors below are commented out — opt in by uncommenting.
+#
+# This hook has NO active code by default — it does nothing until you opt in.
+#
+# =============================================================================
+# OPTIONAL — uncomment any section below to enable it
+# =============================================================================
 
 # ── Optional: print a reminder if the project has a PROJECT.md ───────────────
 # if [ -f ".claude/PROJECT.md" ]; then
