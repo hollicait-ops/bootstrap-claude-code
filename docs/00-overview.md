@@ -70,13 +70,25 @@ claude
 
 ## Examples
 
-The `examples/` directory has ready-to-use configurations:
+> **Not sure where to start customizing?** The `examples/` directory has
+> copy-paste-ready configurations. You don't need to write anything from scratch.
 
-- [examples/settings/settings-full.json](../examples/settings/settings-full.json) — Fully annotated settings for macOS/Linux
-- [examples/settings/settings-full-windows.json](../examples/settings/settings-full-windows.json) — Fully annotated settings for Windows (PowerShell hook paths, Windows-specific entries)
-- [examples/hooks/](../examples/hooks/) — Audit logger, desktop notifications, safety guards
-- [examples/mcp/](../examples/mcp/) — Filesystem, GitHub, and web search MCP configs
-- [examples/claude-md/](../examples/claude-md/) — CLAUDE.md templates for Python, Next.js, and personal use
+The `examples/` directory has ready-to-use configurations organized by type:
+
+**[examples/settings/](../examples/settings/)** — Annotated settings files
+- `settings-full.json` — Every permission rule with comments explaining each one (great for learning)
+- `settings-full-windows.json` — Same, with Windows paths
+- `settings-minimal.json` — Bare minimum config
+- `settings-strict.json` — Locked-down config for sensitive codebases
+
+**[examples/hooks/](../examples/hooks/)** — Ready-made hook scripts
+- Audit logger, desktop notifications, dangerous-rm blocker
+
+**[examples/mcp/](../examples/mcp/)** — MCP server configuration files
+- Filesystem, GitHub, and web search integrations
+
+**[examples/claude-md/](../examples/claude-md/)** — CLAUDE.md templates
+- Templates for Python projects, web apps, and personal global setup
 
 ## Customization
 

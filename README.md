@@ -173,12 +173,43 @@ The `docs/` directory contains a complete reference for every Claude Code featur
 
 ## Examples
 
-The `examples/` directory has concrete configurations for common scenarios:
+> **New to Claude Code?** Start here — the `examples/` directory has ready-to-use
+> configurations so you don't have to build from scratch.
 
-- [examples/settings/](examples/settings/) — Minimal, strict, and fully-documented settings; see also [settings-full-windows.json](examples/settings/settings-full-windows.json) for Windows
-- [examples/hooks/](examples/hooks/) — Audit logger, notifications, safety guards
-- [examples/mcp/](examples/mcp/) — Filesystem, GitHub, and web search MCP configs
-- [examples/claude-md/](examples/claude-md/) — CLAUDE.md templates for Python, Next.js, and personal use
+The `examples/` directory has concrete, copy-paste-ready configurations:
+
+### Settings examples (`examples/settings/`)
+
+| File | What it is |
+|------|-----------|
+| `settings-full.json` | Every permission rule with inline comments explaining what each one does and why — ideal for learning the permission system |
+| `settings-full-windows.json` | Same as above but with Windows-style paths |
+| `settings-minimal.json` | Bare minimum: just model and a few safety rules |
+| `settings-strict.json` | Locked-down config that asks before most operations — good for sensitive codebases |
+
+### Hook examples (`examples/hooks/`)
+
+| File | What it does |
+|------|-------------|
+| `audit-logger.sh` / `.ps1` | Logs every tool call to a file for auditing |
+| `block-dangerous-rm.sh` | Standalone safety guard for destructive deletions |
+| `notify-on-stop.sh` / `.ps1` | Desktop notification when Claude finishes a response |
+
+### MCP server configs (`examples/mcp/`)
+
+Ready-made MCP configuration files for common tools. Copy to `.mcp.json` in your
+project or merge into `~/.claude/mcp.json`.
+
+### CLAUDE.md templates (`examples/claude-md/`)
+
+| File | Best for |
+|------|---------|
+| `CLAUDE.md-python-project` | Python repos — includes test runner, linting, import conventions |
+| `CLAUDE.md-web-app` | React/Node web apps — frontend patterns, API conventions |
+| `CLAUDE.md-global-persona` | Global `~/.claude/CLAUDE.md` — personal style and commit preferences |
+
+Copy the template that fits your project to `~/.claude/CLAUDE.md` (global) or
+`.claude/CLAUDE.md` (project-specific) and customize from there.
 
 ## Customizing After Install
 
