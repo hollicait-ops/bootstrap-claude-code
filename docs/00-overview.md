@@ -104,3 +104,4 @@ The `docs/` directory contains a complete reference for every Claude Code featur
 | [10-advanced-patterns.md](10-advanced-patterns.md) | Combining features for powerful workflows |
 | [11-troubleshooting.md](11-troubleshooting.md) | Common problems and how to fix them |
 | [12-plugins.md](12-plugins.md) | Installing and managing plugins |
+| [13-voice-mode.md](13-voice-mode.md) | Voice input with push-to-talk |
