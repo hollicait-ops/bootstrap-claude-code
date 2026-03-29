@@ -39,8 +39,17 @@ except Exception:
       | sed 's/.*"command"[[:space:]]*:[[:space:]]*"//; s/"$//')"
   fi
 
-  # Block: rm -rf / or rm -rf ~
+  # Block: rm -rf / or rm -rf ~ (combined flags: -rf, -fr, -Rf, etc.)
   if echo "$COMMAND" | grep -qE 'rm[[:space:]]+-[a-zA-Z]*r[a-zA-Z]*f[[:space:]]+(/|~|/root|\$HOME)'; then
+    echo "BLOCKED: Attempted to recursively delete a root-level or home directory. This is almost certainly a mistake."
+    exit 2
+  fi
+
+  # Block: rm -r -f / or rm -f -r ~ (space-separated flags)
+  if echo "$COMMAND" | grep -qE '^rm[[:space:]]' && \
+     echo "$COMMAND" | grep -qE '[[:space:]](-r|-R|--recursive)([[:space:]]|$)' && \
+     echo "$COMMAND" | grep -qE '[[:space:]](-f|--force)([[:space:]]|$)' && \
+     echo "$COMMAND" | grep -qE '[[:space:]](/|~|/root|\$HOME)'; then
     echo "BLOCKED: Attempted to recursively delete a root-level or home directory. This is almost certainly a mistake."
     exit 2
   fi
