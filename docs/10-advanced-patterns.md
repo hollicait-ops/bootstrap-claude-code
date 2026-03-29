@@ -70,9 +70,9 @@ with appropriate deny rules in settings.json).
 Loads a previous session's context. Useful for picking up long tasks after
 a break.
 
-**Fork a session:**
+**Branch a session:**
 ```
-/fork
+/branch
 ```
 Creates a new session that shares the current conversation history. Experiment
 without losing your main thread.
@@ -169,6 +169,57 @@ if [[ "$TOOL_NAME" == "Bash" ]]; then
   fi
 fi
 ```
+
+## Cross-Surface Workflows
+
+> **Research preview:** These features are available on select plans and may
+> change. Check your subscription for availability.
+
+Claude Code can span multiple devices and surfaces. Three features enable this:
+
+### Remote Control
+
+Connect your local Claude Code terminal session to claude.ai or the Claude
+mobile app. Once connected, you can send instructions from your phone and
+Claude Code executes them locally.
+
+```bash
+claude remote-control
+```
+
+Key properties:
+- Only chat messages travel over the network — your code and files stay local
+- The session runs in an encrypted channel
+- The env var `CLAUDE_CODE_REMOTE` is set to `"true"` inside remote-triggered
+  sessions (useful in hooks to detect remote vs. local execution)
+
+### `/teleport` — Web to Terminal
+
+Pull an active web or cloud session into your local terminal:
+
+```
+/teleport
+```
+
+The session context moves to the terminal; the web session ends. Use this when
+you started a task in the browser and want to continue with full local tool
+access (filesystem, shell, git).
+
+### `/desktop` — Terminal to Desktop App
+
+Hand off your terminal session to the Claude Desktop app:
+
+```
+/desktop
+```
+
+Use this to review diffs visually, access Desktop-specific features, or get
+a better UI for long-running tasks.
+
+---
+
+**Note:** These are research preview features. Availability depends on your
+subscription plan and may change.
 
 ## Handling Secrets in Projects
 
