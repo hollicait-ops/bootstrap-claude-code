@@ -170,7 +170,10 @@ if [[ "$TOOL_NAME" == "Bash" ]]; then
 fi
 ```
 
-## Cross-Surface Workflows *(research preview)*
+## Cross-Surface Workflows
+
+> **Research preview:** These features are available on select plans and may
+> change. Check your subscription for availability.
 
 Claude Code can span multiple devices and surfaces. Three features enable this:
 
@@ -198,8 +201,9 @@ Pull an active web or cloud session into your local terminal:
 /teleport
 ```
 
-Use this when you started a task in the browser and want to continue with full
-local tool access (filesystem, shell, git).
+The session context moves to the terminal; the web session ends. Use this when
+you started a task in the browser and want to continue with full local tool
+access (filesystem, shell, git).
 
 ### `/desktop` — Terminal to Desktop App
 
