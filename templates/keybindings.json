@@ -15,8 +15,8 @@
     "description": "Clear the current conversation"
   },
   {
-    "key": "space",
+    "key": "ctrl+shift+space",
     "command": "voice:pushToTalk",
-    "description": "Push-to-talk voice input (hold space to speak)"
+    "description": "Push-to-talk voice input (hold to speak)"
   }
 ]

@@ -33,7 +33,7 @@ Single keys: `space`, `escape`, `enter`, `tab`, `f1`–`f12`
 | `claude.openPlanMode` | — | Enter plan mode |
 | `claude.openMemory` | — | Open memory viewer |
 | `claude.clearConversation` | — | Clear current conversation |
-| `voice:pushToTalk` | `space` | Hold to speak (voice input) |
+| `voice:pushToTalk` | `ctrl+shift+space` | Hold to speak (voice input) |
 
 ## Bootstrapper Defaults
 
@@ -41,16 +41,16 @@ The bootstrapper installs these bindings (only if the key slot is unused):
 
 ```json
 [
-  {"key": "ctrl+shift+p", "command": "claude.openPlanMode"},
-  {"key": "ctrl+shift+m", "command": "claude.openMemory"},
-  {"key": "ctrl+shift+.", "command": "claude.clearConversation"},
-  {"key": "space",        "command": "voice:pushToTalk"}
+  {"key": "ctrl+shift+p",     "command": "claude.openPlanMode"},
+  {"key": "ctrl+shift+m",     "command": "claude.openMemory"},
+  {"key": "ctrl+shift+.",     "command": "claude.clearConversation"},
+  {"key": "ctrl+shift+space", "command": "voice:pushToTalk"}
 ]
 ```
 
 ## Changing the Voice Push-to-Talk Key
 
-The voice push-to-talk key defaults to `space`. To change it:
+The voice push-to-talk key defaults to `ctrl+shift+space`. To change it:
 
 ```json
 [
