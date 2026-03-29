@@ -2,13 +2,44 @@
 
 Claude Code settings control model selection, permissions, hooks, and behavior.
 
+## Understanding the ~ Symbol in Paths
+
+Throughout this guide you will see paths like `~/.claude/settings.json`.
+The `~` is shorthand for your **home directory** — the personal folder your
+operating system assigns to your user account:
+
+| OS | Your home directory |
+|----|---------------------|
+| macOS | `/Users/yourname` |
+| Linux / WSL | `/home/yourname` |
+| Windows (native) | `C:\Users\yourname` |
+
+So `~/.claude/settings.json` means a file named `settings.json` inside a
+folder called `.claude` inside your home directory. Claude Code creates this
+file automatically the first time you run it.
+
 ## File Locations
 
-| Path | Scope |
-|------|-------|
-| `~/.claude/settings.json` | Global — applies to every project |
-| `.claude/settings.json` | Project — applies only in this directory tree |
-| `.claude/settings.local.json` | Local project — not committed to git |
+There are three levels of settings, each with a different scope:
+
+| File | Scope | Committed to git? |
+|------|-------|-------------------|
+| `~/.claude/settings.json` | **Global** — applies to every project on your machine | Never |
+| `.claude/settings.json` | **Project** — applies only in this directory tree | Optional (yes for team defaults) |
+| `.claude/settings.local.json` | **Local** — personal overrides for one project | No (gitignored) |
+
+Settings load in order: global first, then project, then local. Later settings
+override earlier ones for the same key.
+
+**When to use each level:**
+
+- **Start with global** (`~/.claude/settings.json`) for anything that should
+  apply everywhere: safety rules, your preferred model, personal permissions.
+- **Add project settings** (`.claude/settings.json`) when a specific repo
+  needs different behavior — for example, allowing a project-specific test
+  command, or sharing hook configurations with your team by committing the file.
+- **Use local settings** (`.claude/settings.local.json`) for personal
+  overrides that differ from your team's project settings.
 
 Project settings override global settings. Local settings override project settings.
 
